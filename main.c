@@ -35,7 +35,7 @@ int main(){
         switch(choice){
             case create_worker:
                 printf("você escolheu criar_servidor");
-                success = createWorkerUI();
+                success = true;
                 break;
             case update_worker:
                 printf("você escolheu editar_servidor");

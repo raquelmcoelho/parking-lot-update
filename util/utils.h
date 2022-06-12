@@ -1,10 +1,18 @@
-#ifndef UNTITLED_UTILS_H
-#define UNTITLED_UTILS_H
+#ifndef UTILS_H
+#define UTILS_H
+#endif //UTILS_H
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <locale.h>
 #include <stdbool.h>
 #include <string.h>
+#include <locale.h>
+
+#include "crud/create/create.c"
+#include "crud/read/read.c"
+#include "file_handler/file_handler.h"
+#include "read/read.h"
+#include "ui/ui.h"
 
 // Colors to use in terminal
 #define red "\x1B[31m"
@@ -122,7 +130,7 @@ char* getMandatoryStringFieldFromUserInput(char* field, char msg[]);
 int getMandatoryIntegerFieldFromUserInput(char* field, char msg[]);
 char* getStringFieldFromUserInput(char* field, char msg[]);
 int getIntegerFieldFromUserInput(char* field, char msg[]);
-
+char getMandatoryWillFieldFromUserInput();
 
 
 // get the first vacant position in an array
@@ -140,4 +148,3 @@ int getFirstVacantIndex(bool array[], int n);
 char* getDivider();
 
 
-#endif //UNTITLED_UTILS_H

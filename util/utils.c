@@ -6,8 +6,6 @@
 #define PRESS_ANY_KEY_TO_CONTINUE "Pressione qualquer tecla para continuar   .    .    ."
 
 
-
-
 // DEPRACATED
 
 

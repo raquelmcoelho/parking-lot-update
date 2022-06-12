@@ -1,8 +1,10 @@
-#ifndef UNTITLED_WORKER_H
-#define UNTITLED_WORKER_H
+#ifndef WORKER_H
+#define WORKER_H
+#endif //WORKER_H
 
-#ifndef UNTITLED_UTILS_H
-    #include "../util/utils.h"
+
+#ifndef UTILS_H
+#include "../util/utils.h"
 #endif
 //int variavel2 = 20;
 
@@ -14,10 +16,6 @@ worker createWorker(char* code, char* name, char* siape, char* cpf, char* birthd
 
 
 
-//insertFile();
-//updateFile();
-//deleteFile();
-//getNodeFile();
 
 
 
@@ -56,4 +54,3 @@ worker createWorker(char* code, char* name, char* siape, char* cpf, char* birthd
 // void initializeWorkerColumns();
 // // See all database
 // void seeDatabase();
-#endif //UNTITLED_WORKER_H
