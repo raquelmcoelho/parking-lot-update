@@ -1,0 +1,17 @@
+# ninja log v5
+3	222	6765296640468465	CMakeFiles/untitled.dir/main.c.obj	a07332b9b080339f
+223	615	6765296644373812	untitled.exe	c2a8c657f904fb1b
+11	1262	6767189601071451	build.ninja	5dd59cda783803fd
+82	1171	6767189619177775	CMakeFiles/untitled.dir/vehicle/user_input/user_input.c.obj	155072246cb8b716
+120	2443	6767191140112675	CMakeFiles/untitled.dir/util/utils.c.obj	f53edb1391c32c98
+23	2472	6767191145758175	CMakeFiles/untitled.dir/main.c.obj	a07332b9b080339f
+45	428	6767191323676954	CMakeFiles/untitled.dir/worker/worker.c.obj	fb7bbe9a51d4133f
+147	590	6767191559291916	CMakeFiles/untitled.dir/vehicle/read/read.c.obj	ce8c42f19107bc81
+28	3016	6767193222353587	CMakeFiles/untitled.dir/main.c.obj	a07332b9b080339f
+51	884	6767193729522518	CMakeFiles/untitled.dir/vehicle/user_input/user_input.c.obj	155072246cb8b716
+103	913	6767194138691176	CMakeFiles/untitled.dir/vehicle/read/read.c.obj	ce8c42f19107bc81
+78	917	6767194138691176	CMakeFiles/untitled.dir/vehicle/user_input/user_input.c.obj	155072246cb8b716
+7	992	6767194139907931	CMakeFiles/untitled.dir/vehicle/vehicle.c.obj	dc0e8868a756ebd1
+996	3446	6767194164238907	untitled.exe	8d0d18197cd10757
+5	374	6767194689929910	CMakeFiles/untitled.dir/main.c.obj	a07332b9b080339f
+374	705	6767194693216829	untitled.exe	8d0d18197cd10757

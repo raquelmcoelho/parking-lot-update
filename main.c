@@ -2,129 +2,113 @@
 #include <stdlib.h>
 #include <locale.h>
 #include <stdbool.h>
+#include <string.h>
+#include "util/utils.h"
+#include "worker/worker.h"
+#include "vehicle/vehicle.h"
 
-// #include "servidor/servidor.h"
-#include "servidor/servidor.c"
-#include "util/util.c"
-#include "veiculo/veiculo.c"
-#include "veiculo/veiculo.h"
 
 int main(){
-    // set the language to portuguese
     setlocale(LC_ALL, "Portuguese");
 
-    // integer of choice make by user from menu of options
     int choice = 0;
+    bool success = false;
 
-    // make sure the database starts empty
-    initializeBoolArray(parkingSpaces, MAX_VEHICLES);
-    initializeBoolArray(spaceWorkers, MAX_WORKERS);
-
-    // initialize columns of each table
-    initializeWorkerColumns();
-
-    // shows the menu of options, at least one time
     do{
-        // menu of options
         printf("\n\nMENU\n");
-        printf("%s1- Adicionar servidor                                           %s\n", cyan, normal);
-        printf("%s2- Alterar servidor                                             %s\n", cyan, normal);
-        printf("%s3- Deletar servidor                                             %s\n", cyan, normal);
-        printf("%s4- Ler servidor                                                 %s\n", cyan, normal);
-        printf("%s5- Ler todos servidores                                         %s\n", cyan, normal);
-        printf("%s6- Ler todos servidores por ordem alfabética                    %s\n", cyan, normal);
-        printf("%s7- Ler todos professores por ordem alfabética                   %s\n", cyan, normal);
-        printf("%s8- Ler todos técnicos admnistrativos por ordem alfabética       %s\n", cyan, normal);
-        printf("%s10- Adicionar veículo                                           %s\n", green, normal);
-        printf("%s11- Alterar veículo                                             %s\n", green, normal);
-        printf("%s12- Deletar veículo                                             %s\n", green, normal);
-        printf("%s13- Ler veículo                                                 %s\n", green, normal);
-        printf("%s14- Ler todos veículos                                          %s\n", green, normal);
-        printf("%s15- Ler os veículos de um servidor em ordem alfabética          %s\n", green, normal);
-        printf("%s16- Ler os veículos em ordem alfabética                         %s\n", green, normal);
-        printf("%s100- sair                                                       %s\n", red, normal);
+        printf("%s 1 - Adicionar servidor                                           %s\n", cyan, normal);
+        printf("%s 2 - Alterar servidor                                             %s\n", cyan, normal);
+        printf("%s 3 - Deletar servidor                                             %s\n", cyan, normal);
+        printf("%s 4 - Ler servidor                                                 %s\n", cyan, normal);
+        printf("%s 5 - Ler todos servidores                                         %s\n", cyan, normal);
+        printf("%s 6 - Ler todos servidores por ordem alfabética                    %s\n", cyan, normal);
+        printf("%s 7 - Ler todos professores por ordem alfabética                   %s\n", cyan, normal);
+        printf("%s 8 - Ler todos técnicos admnistrativos por ordem alfabética       %s\n", cyan, normal);
+        printf("%s 9 - Adicionar veículo                                           %s\n", green, normal);
+        printf("%s 10- Alterar veículo                                             %s\n", green, normal);
+        printf("%s 11- Deletar veículo                                             %s\n", green, normal);
+        printf("%s 12- Ler veículo                                                 %s\n", green, normal);
+        printf("%s 13- Ler os veículos de um servidor                                        %s\n", green, normal);
+        printf("%s 14- Ler os veículos de um servidor em ordem alfabética          %s\n", green, normal);
+        printf("%s 100- sair                                                       %s\n", red, normal);
         printf("%sEntre com o número da sua opção:                                %s\n", cyan, normal);
 
-        char userInput[255];
-        // get the user input
-        fgets(userInput, 255, stdin);
-        // convert the input to an integer
-        choice = atoi(userInput);
-        
+        // TODO: getIntFromUser()
+        scanf("%d", &choice);
+
         switch(choice){
-            case 1:
-                // add a worker
-                insertNewServer();
+            case create_worker:
+                printf("você escolheu criar_servidor");
+                success = true;
                 break;
-            case 2:
-                // alter a worker
-                alterServer(-1);
+            case update_worker:
+                printf("você escolheu editar_servidor");
+                success = false;
                 break;
-            case 3:
-                // delete a worker
-                deleteServer(-1);
+            case delete_worker:
+                printf("você escolheu deletar_servidor");
+                success = false;
                 break;
-            case 4:
-                // read a worker
-                read();
+            case read_one_worker:
+                printf("você escolheu ler__um_servidor");
+                success = false;
                 break;
-            case 5:
-                // read all workers
-                readAll();
+            case read_workers:
+                printf("você escolheu ler_servidores");
+                success = false;
                 break;
-            case 6:
-                // read all workers by alphabetical order
-                readAllOrderByName();
+            case read_workers_alphabetically:
+                printf("você escolheu ler_servidores_alfabetica");
+                success = true;
                 break;
-            case 7:
-                // read all professors by alphabetical order
-                teacherOrderByName();
+            case read_technicians_alphabetically:
+                printf("você escolheu ler_tecnicos_admnistrativos_alfabetica");
+                success = true;
                 break;
-            case 8:
-                // read all technicians by alphabetical order
-                technicianOrderByName();
+            case read_teachers_alphabetically:
+                printf("você escolheu ler_professores_alfabetica");
+                success = true;
                 break;
-            case 10:
-                // add a vehicle
-                insertVehicle();
+            case create_vehicle:
+                printf("você escolheu criar_veiculo");
+                success = true;
                 break;
-            case 11:
-                // alter a vehicle
-                updateVehicle();
+            case update_vehicle:
+                printf("você escolheu editar_veiculo");
+                success = true;
                 break;
-            case 12:
-                // delete a vehicle
-                deleteVehicle();
+            case delete_vehicle:
+                printf("você escolheu deletar_veiculo");
+                success = true;
                 break;
-            case 13:
-                // read a vehicle
-                readVehicleByPosition();
+            case read_one_vehicle:
+                printf("você escolheu ler_um_veiculo");
+                success = true;
                 break;
-            case 14:
-                // read all vehicles
-                readAllVehicles();
+            case read_vehicles_worker:
+                printf("você escolheu ler_veiculos_servidor");
+                success = true;
                 break;
-            case 15:      
-                // read all vehicles of a worker by alphabetical order      
-                readVehiclesOfWorkerInAlphabeticalOrder();
+            case read_vehicles_worker_alphabetically:
+                printf("você escolheu ler_veiculos_servidor_alfabetica:     ");
+                success = true;
                 break;
-            case 16:
-                // read all vehicles in alphabetical order
-                readVehiclesInAlphabeticalOrder();
-                break;
-            case 100:
+            case exit_program:
                 // exit
                 printf("\n%sAté a próxima ☻♥%s\n", yellow, normal);
-                exit(0);
+                success = true;
+                exit(1);
+                break;
             default:
-                // invalid input
                 printf("Entrada inválida\n");
                 break;
         }
-        // clear the standard input to avoid problems
-        fflush(stdin);
-        // block the program until the user presses enter
-        // so the user can see the output
-        showBlockingMessage();
-    } while (choice != 100);
+
+        if(success){
+            printf("\n%sA operação foi bem sucedida%s\n", green, normal);
+        } else {
+            printf("\n%sA operação não foi concluída%s\n", red, normal);
+        }
+
+    } while (choice != exit_program);
 }
