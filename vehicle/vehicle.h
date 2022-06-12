@@ -1,12 +1,16 @@
 #ifndef UNTITLED_VEHICLE_H
 #define UNTITLED_VEHICLE_H
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
+
+#ifndef UNTITLED_UTILS_H
+#include "../util/utils.h"
+#endif
 
 #ifndef MAX_VEHICLES
 #define MAX_VEHICLES 10
 #endif
+
+//int variavel = 10;
+
 //
 //// vagas para veículos
 //bool parkingSpaces[MAX_VEHICLES];

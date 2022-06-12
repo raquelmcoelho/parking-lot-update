@@ -1,8 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <locale.h>
-#include <stdbool.h>
-#include <string.h>
 #include "util/utils.h"
 #include "worker/worker.h"
 #include "vehicle/vehicle.h"
@@ -31,7 +26,8 @@ int main(){
         printf("%s 13- Ler os veículos de um servidor                                        %s\n", green, normal);
         printf("%s 14- Ler os veículos de um servidor em ordem alfabética          %s\n", green, normal);
         printf("%s 100- sair                                                       %s\n", red, normal);
-        printf("%sEntre com o número da sua opção:                                %s\n", cyan, normal);
+        printf("%s Entre com o número da sua opção:                                %s\n", cyan, normal);
+//        printf("%d %d", variavel, variavel2);
 
         // TODO: getIntFromUser()
         scanf("%d", &choice);
@@ -39,7 +35,7 @@ int main(){
         switch(choice){
             case create_worker:
                 printf("você escolheu criar_servidor");
-                success = true;
+                success = createWorkerUI();
                 break;
             case update_worker:
                 printf("você escolheu editar_servidor");
@@ -50,7 +46,7 @@ int main(){
                 success = false;
                 break;
             case read_one_worker:
-                printf("você escolheu ler__um_servidor");
+                printf("você escolheu ler_um_servidor");
                 success = false;
                 break;
             case read_workers:

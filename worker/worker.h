@@ -1,14 +1,23 @@
 #ifndef UNTITLED_WORKER_H
 #define UNTITLED_WORKER_H
-#include "../util/utils.h"
 
+#ifndef UNTITLED_UTILS_H
+    #include "../util/utils.h"
+#endif
+//int variavel2 = 20;
 
-worker createWorker(char* code, char* name, char* siape, char* cpf, char* birthday, char *rg, char *address, char *wage, type type);
 bool createWorkerUI();
 bool updateWorkerUI();
 bool deleteWorkerUI();
 bool readOneWorkerUI();
+worker createWorker(char* code, char* name, char* siape, char* cpf, char* birthday, char *rg, char *address, char *wage, type type);
 
+
+
+//insertFile();
+//updateFile();
+//deleteFile();
+//getNodeFile();
 
 
 

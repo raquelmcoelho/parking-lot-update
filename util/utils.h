@@ -1,10 +1,9 @@
 #ifndef UNTITLED_UTILS_H
 #define UNTITLED_UTILS_H
-
 #include <stdio.h>
 #include <stdlib.h>
+#include <locale.h>
 #include <stdbool.h>
-// String methods lib
 #include <string.h>
 
 // Colors to use in terminal
