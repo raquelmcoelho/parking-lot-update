@@ -1,3 +1,0 @@
-C:/Users/raque/Documents/Projetos/c/parking-lot-update/cmake-build-debug/CMakeFiles/parking_lot_update.dir
-C:/Users/raque/Documents/Projetos/c/parking-lot-update/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/raque/Documents/Projetos/c/parking-lot-update/cmake-build-debug/CMakeFiles/rebuild_cache.dir
