@@ -40,6 +40,7 @@
     read_one_vehicle,
     read_vehicles_worker,
     read_vehicles_worker_alphabetically,
+    read_all_vehicles, // extra
     exit_program
 } option;
 

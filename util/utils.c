@@ -15,6 +15,15 @@ int getIntegerFieldFromUserInput(char* field, char msg[]){
     return atoi(field);
 }
 
+bool checkStringIsNumber(char string[255]){
+    for(int i = 0; i < strlen(string); i++){
+        if(isalpha(string[i]) || !isdigit(string[i])){
+            return false;
+        }
+    }
+    return true;
+}
+
 
 // removes trailling and leading spaces from a string
 char* removeTrailingAndLeadingSpaces(char* string){
@@ -199,21 +208,17 @@ char getMandatoryWillFieldFromUserInput(){
 // get a mandatory integer field from the user
 int getMandatoryIntegerFieldFromUserInput(char* field, char msg[]){
     int integer;
-    do {
+
+    do
+    {
         integer = getIntegerFieldFromUserInput(field, msg);
-    } while (!checkStringIsNumber(field));
+    } while (integer == 0);
+
     return integer;
 }
 
 
-bool checkStringIsNumber(char string[255]){
-    for(int i = 0; i < strlen(string); i++){
-        if(isalpha(string[i]) || !isdigit(string[i])){
-            return false;
-        }
-    }
-    return true;
-}
+
 
 
 

@@ -21,11 +21,6 @@
     } while (false)
 #endif
 
-typedef enum status_enum
-{
-    deleted = 0,
-    active = 1
-} status;
 
 // struct vehicle
 
@@ -146,6 +141,30 @@ void createVehicle()
 // read vehicle of certain position
 void showVehicleByCode()
 {
+    VEHICLE vehicle;
+    FILE *fp;
+    int vehicleCode;
+    char vehicleCodeVessel[255];
+    vehicleCode = getMandatoryIntegerFieldFromUserInput(vehicleCodeVessel, "Digite o código do veículo: ");
+
+    fp = fopen("vehicle_database.bin", "rb");
+    if (fp == NULL)
+    {
+        printf("Erro ao abrir o arquivo\n");
+        return;
+    }
+
+    // fseek to the position of the vehicle
+    fseek(fp, vehicleCode * sizeof(VEHICLE), SEEK_SET);
+
+    // read the vehicle
+    fread(&vehicle, sizeof(VEHICLE), 1, fp);
+
+    if(vehicle.status != deleted)
+    {
+        _showVehicle(vehicle);
+        showBlockingMessage();
+    }
 }
 
 // pegar struct por codigo
@@ -162,10 +181,15 @@ void deleteVehicle()
     long int n_reg;
     char resp;
 
+    char vehicleCodeVessel[255];
+
+
     fp = fopen("vehicle_database.bin", "r+b");
 
     printf("Código do veículo a ser apagado: ");
     // scanf("%ld", &n_reg);
+    n_reg = getMandatoryIntegerFieldFromUserInput(vehicleCodeVessel, "Digite o código do veículo: ");
+
     fflush(stdin);
 
     if (fseek(fp, (n_reg - 1) * sizeof(VEHICLE), SEEK_SET) != 0)
@@ -248,10 +272,13 @@ void updateVehicle()
     FILE *fp;
     long int n_reg;
 
+    char vehicleCodeVessel[255];
+
     fp = fopen("vehicle_database.bin", "r+b");
 
     printf("Código do Veículo a ser alterado: ");
-    // scanf("%ld", &n_reg);
+    n_reg = getMandatoryIntegerFieldFromUserInput(vehicleCodeVessel, "Digite o código do veículo: ");
+    
     fflush(stdin);
     if (fseek(fp, (n_reg - 1) * sizeof(VEHICLE), SEEK_SET) != 0)
     {
@@ -310,6 +337,7 @@ void readVehiclesInAlphabeticalOrder(bool ofWorkerMode)
     FILE *fp;
     int i = 0;
     int workerCode = -1;
+    char workerCodeVessel[255];
 
     fp = fopen("vehicle_database.bin", "rb");
     if (fp == NULL)
@@ -320,8 +348,7 @@ void readVehiclesInAlphabeticalOrder(bool ofWorkerMode)
 
     if (ofWorkerMode)
     {
-        printf("Digite o código do funcionário: ");
-        // scanf("%d", &workerCode);
+        workerCode = getMandatoryIntegerFieldFromUserInput(workerCodeVessel, "Digite o código do funcionário: ");
         fflush(stdin);
     }
 
@@ -355,12 +382,20 @@ void readVehiclesInAlphabeticalOrder(bool ofWorkerMode)
         }
     }
 
+    int numberOfShownVehicles = 0;
+
     // For each index in the list, show the i-th vehicle
     for (int i = 0; i < _countStoredStructs(); i++)
     {
-        if (v[i].status == deleted || v[i].workerCode != workerCode)
+        if (v[i].status == deleted || (ofWorkerMode && v[i].workerCode != workerCode))
             continue;
         printf("-----------------------------------------------------\n");
+        printf("Código: %d\n", v[i].index + 1);
         _showVehicleByIndex(v[i].index);
+        numberOfShownVehicles++;
     }
+
+    if(numberOfShownVehicles == 0)
+        printf("Nenhum veículo encontrado\n");
+        showBlockingMessage();
 }

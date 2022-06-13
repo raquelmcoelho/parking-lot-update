@@ -3,10 +3,12 @@
 #include "vehicle/vehicle.h"
 
 
+
 int main(){
     setlocale(LC_ALL, "Portuguese");
 
     int choice = 0;
+    char choiceVessel[2];
     bool success = false;
 
     if(!(fileExists("vehicle_database.bin"))){
@@ -35,7 +37,6 @@ int main(){
         // printf("%s Entre com o número da sua opção:                                %s\n", cyan, normal);
 
         // TODO: getIntFromUser()
-        char choiceVessel[255];
         choice = getMandatoryIntegerFieldFromUserInput(choiceVessel, "Entre com o número da sua opção:  ");
 
         switch(choice){
@@ -78,27 +79,32 @@ int main(){
                 break;
             case update_vehicle:
                 // printf("você escolheu editar_veiculo\n");
-                // updateVehicle();
+                updateVehicle();
                 success = true;
                 break;
             case delete_vehicle:
                 // printf("você escolheu deletar_veiculo\n");
-                // deleteVehicle();
+                deleteVehicle();
                 success = true;
                 break;
             case read_one_vehicle:
                 // printf("você escolheu ler_um_veiculo\n");
-                // showVehicleByCode();
+                showVehicleByCode();
                 success = true;
                 break;
             case read_vehicles_worker:
                 // printf("você escolheu ler_veiculos_servidor\n");
-                // showVehiclesOfWorkerInAlphabeticalOrder();
+                readVehiclesInAlphabeticalOrder(1);
                 success = true;
                 break;
             case read_vehicles_worker_alphabetically:
                 // printf("você escolheu ler_veiculos_servidor_alfabetica:     \n");
-                // readVehiclesOfWorkerInAlphabeticalOrder(1);
+                readVehiclesInAlphabeticalOrder(1);
+                success = true;
+                break;
+            case read_all_vehicles:
+                // printf("você escolheu ler_veiculos_servidor_alfabetica:     \n");
+                readVehiclesInAlphabeticalOrder(0);
                 success = true;
                 break;
             case exit_program:
