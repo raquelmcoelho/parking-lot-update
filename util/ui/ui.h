@@ -10,3 +10,5 @@ char* getVehicleLicensePlateFromUserInput();
 char* getVehicleModelFromUserInput();
 
 int getPositionFromUserInput();
+
+char getWillFromUserInput();

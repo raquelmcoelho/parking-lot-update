@@ -11,8 +11,7 @@ void showVehiclesOfWorkerInAlphabeticalOrder(char workerRegistrationNumber[]);
 void showVehicleByPosition(int position);
 
 // show vehicle data based on vehicle code
-void showVehicleByCode(char code[]);
-
+void showVehicleByCode();
 
 // show all vehicles, regardless of server
 void showAllVehicles();

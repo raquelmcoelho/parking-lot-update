@@ -1,64 +1,85 @@
-#ifndef VEHICLE_H
-#define VEHICLE_H
-#endif //VEHICLE_H
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+#include <ctype.h> /* Função toupper*/
 
-#ifndef UTILS_H
-#include "../util/utils.h"
-#endif
-//
-//#ifndef MAX_VEHICLES
-//#define MAX_VEHICLES 10
-//#endif
-//
-//// vagas para veículos
-//bool parkingSpaces[MAX_VEHICLES];
-//
-//
-//// Esse header é para o módulo de veículos
-//char codeOfEachVehicle[MAX_VEHICLES][255];
-//char descriptionOfEachVehicle[MAX_VEHICLES][255];
-//char licensePlateOfEachVehicle[MAX_VEHICLES][255];
-//char brandOfEachVehicle[MAX_VEHICLES][255];
-//char modelOfEachVehicle[MAX_VEHICLES][255];
-//
-//// Opcionais
-//char workerRegistrationNumberOfVehicleOfEachVehicle[MAX_VEHICLES][255];
-//
-//// função para inserir uma nova veículo
-//// void insertVehicle(char vehicleRegistrationNumber[], char description[], char licensePlate[], char brand[], char model[], char workerRegistrationNumber[]);
-//void createVehicle();
-//
-//// função para alterar uma veículo existente
-//void updateVehicle();
-//
-//// função para excluir uma veículo
-//void deleteVehicle();
-//
-//void readVehiclesOfWorkerInAlphabeticalOrder();
-//
-//
-//// Funções auxiliares
-//
-//// função verificadora de existência do veículo
-//bool existsVehicle(char vehicleRegistrationNumber[]);
-//
-//// função verificadora de unicidade da descrição do veículo
-//bool verifyDescriptionUniqueness(char description[]);
-//
-//// função para checar campos obrigatórios
-//bool verifyRequiredFields(char vehicleRegistrationNumber[], char description[], char licensePlate[], char brand[], char model[]);
-//
-//// funções de traMAX_VEHICLESento de dados vindos do usuário
-//void sanitizeVehicleRegistrationNumber(char vehicleRegistrationNumber[]);
-//void sanitizeDescription(char description[]);
-//void sanitizeLicensePlate(char licensePlate[]);
-//void sanitizeBrand(char brand[]);
-//void sanitizeModel(char model[]);
-//void sanitizeWorkerRegistrationNumber(char workerRegistrationNumber[]);
-//
-//// função geradora de códigos de identificação de veículos
-//void generateVehicleRegistrationNumber(char vehicleRegistrationNumber[]);
-//
-//
-//
-//
+
+// struct vehicle
+
+
+
+// pedir campos da struct
+// checar uniquidade do campo inserido
+// iterar arquivo e ve se há espaço vazio
+// se não existir
+//     append struct no file
+// se existir
+//     sobrescreve naquela posicao livre
+
+// create a new vehicle
+void createVehicle();
+
+// pegar struct por codigo
+// se nao existir 
+//     retorna false
+// printa struct
+// retorna true
+
+// read vehicle of certain position
+void showVehicleByCode();
+
+
+
+// pegar struct por codigo
+// se nao existir 
+//     retorna false
+// setar flag ocupada pra 0
+// printa struct
+// sobrescreve struct alterada no arquivo na posicao achada
+// retorna true
+void deleteVehicle();
+
+
+// se não existir registro
+//     avisa na tela
+// itera arquivo inteiro
+// pega struct na posicao
+// printa struct
+// retorna true;
+
+// read all vehicles
+void readAllVehicles();
+
+// pegar struct por codigo
+// se nao existir 
+//     retorna false
+// printa struct
+// perguntar campo a campo se va querer editar ou não
+// se quiser
+//     edita campo 
+//     se for campo unico
+//         checar uniquidade do campo inserido
+// sobrescreve struct alterada no arquivo na posicao achada
+// update an existing vehicle
+void updateVehicle();
+
+//     itera arquivo inteiro
+//     pega struct na posicao
+//     tranforma em tupla com o campo a ser ordenado (nome/descricao)
+//     ordena tuplas
+//     itera tuplas 
+//         pega struct na posicao da tupla
+//         filtro não existir || filtro for satisfeito
+//             printa struct na posicao do tupla
+//     fechar arquivo
+
+// Read the i-th vehicle
+// Make a tuple-3 of i, the i-th description and the status
+// Add the tuple-3 to a list
+// Sort the list by the second element of the tuple-3
+// Map the list to the first element of the tuple-3
+// Such list is the indexes ordered by the description alphabetically
+// For each index in the list, show the i-th vehicle
+
+void readVehiclesInAlphabeticalOrder(bool ofWorkerMode);

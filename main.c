@@ -1,5 +1,5 @@
 #include "util/utils.h"
-#include "worker/worker.h"
+// #include "worker/worker.h"
 #include "vehicle/vehicle.h"
 
 
@@ -8,6 +8,12 @@ int main(){
 
     int choice = 0;
     bool success = false;
+
+    if(!(fileExists("vehicle_database.bin"))){
+        FILE* file = fopen("vehicle_database.bin", "wb");
+        fclose(file);
+    }
+
 
     do{
         printf("\n\nMENU\n");
@@ -26,67 +32,73 @@ int main(){
         printf("%s 13- Ler os veículos de um servidor                                        %s\n", green, normal);
         printf("%s 14- Ler os veículos de um servidor em ordem alfabética          %s\n", green, normal);
         printf("%s 100- sair                                                       %s\n", red, normal);
-        printf("%s Entre com o número da sua opção:                                %s\n", cyan, normal);
-//        printf("%d %d", variavel, variavel2);
+        // printf("%s Entre com o número da sua opção:                                %s\n", cyan, normal);
 
         // TODO: getIntFromUser()
-        scanf("%d", &choice);
+        char choiceVessel[255];
+        choice = getMandatoryIntegerFieldFromUserInput(choiceVessel, "Entre com o número da sua opção:  ");
 
         switch(choice){
             case create_worker:
-                printf("você escolheu criar_servidor");
+                // printf("você escolheu criar_servidor\n");
                 success = true;
                 break;
             case update_worker:
-                printf("você escolheu editar_servidor");
+                // printf("você escolheu editar_servidor\n");
                 success = false;
                 break;
             case delete_worker:
-                printf("você escolheu deletar_servidor");
+                // printf("você escolheu deletar_servidor\n");
                 success = false;
                 break;
             case read_one_worker:
-                printf("você escolheu ler_um_servidor");
+                // printf("você escolheu ler_um_servidor\n");
                 success = false;
                 break;
             case read_workers:
-                printf("você escolheu ler_servidores");
+                // printf("você escolheu ler_servidores\n");
                 success = false;
                 break;
             case read_workers_alphabetically:
-                printf("você escolheu ler_servidores_alfabetica");
+                // printf("você escolheu ler_servidores_alfabetica\n");
                 success = true;
                 break;
             case read_technicians_alphabetically:
-                printf("você escolheu ler_tecnicos_admnistrativos_alfabetica");
+                // printf("você escolheu ler_tecnicos_admnistrativos_alfabetica\n");
                 success = true;
                 break;
             case read_teachers_alphabetically:
-                printf("você escolheu ler_professores_alfabetica");
+                // printf("você escolheu ler_professores_alfabetica\n");
                 success = true;
                 break;
             case create_vehicle:
-                printf("você escolheu criar_veiculo");
+                // printf("você escolheu criar_veiculo\n");
+                createVehicle();
                 success = true;
                 break;
             case update_vehicle:
-                printf("você escolheu editar_veiculo");
+                // printf("você escolheu editar_veiculo\n");
+                // updateVehicle();
                 success = true;
                 break;
             case delete_vehicle:
-                printf("você escolheu deletar_veiculo");
+                // printf("você escolheu deletar_veiculo\n");
+                // deleteVehicle();
                 success = true;
                 break;
             case read_one_vehicle:
-                printf("você escolheu ler_um_veiculo");
+                // printf("você escolheu ler_um_veiculo\n");
+                // showVehicleByCode();
                 success = true;
                 break;
             case read_vehicles_worker:
-                printf("você escolheu ler_veiculos_servidor");
+                // printf("você escolheu ler_veiculos_servidor\n");
+                // showVehiclesOfWorkerInAlphabeticalOrder();
                 success = true;
                 break;
             case read_vehicles_worker_alphabetically:
-                printf("você escolheu ler_veiculos_servidor_alfabetica:     ");
+                // printf("você escolheu ler_veiculos_servidor_alfabetica:     \n");
+                // readVehiclesOfWorkerInAlphabeticalOrder(1);
                 success = true;
                 break;
             case exit_program:
@@ -99,6 +111,8 @@ int main(){
                 printf("Entrada inválida\n");
                 break;
         }
+
+        fflush(stdin);
 
         if(success){
             printf("\n%sA operação foi bem sucedida%s\n", green, normal);

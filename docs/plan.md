@@ -36,62 +36,7 @@ Atividades Complementares -> Responsável: Ambos
 
 
 
-Faça um programa em linguagem C para armazenar informações de um servidor do IFCE
-e suas veículos para controlar o acesso ao estacionamento.
-Nesse programa use ponteiros, estruturas (structs), enum, ponteiros para estruturas,
-funções e E/S com arquivos.
-Variáveis para cada servidor:
-- código* (do servidor)
-- nome*
-- SIAPE*
-- CPF*
-- data nascimento*
-- RG
-- endereço
-- salário
-- tipo (docente ou técnico administrativo)
-
-
-Variáveis para cada veículo:
-- código do servidor
-- código* (da veículo)
-- descricao*
-- placa*
-- marca* (VW, GM, Ford, etc)
-- modelos* (Gol, Polo, Cruze, Ka, etc)
-
-O asteristo "*" acima indica que o campo é obrigatório, ou seja, deve ser informado no
-cadastro.
-As funcionalidades para servidores são:
-- inserir um novo servidor
-- alterar um servidor existente
-- excluir um servidor
-- mostrar/imprimir dados de um servidor com base no código
-- mostrar/imprimir todos os servidores
-- mostrar/imprimir todos os servidores em ordem alfabética pelo nome
-- mostrar/imprimir todos os professores em ordem alfabética pelo nome
-- mostrar/imprimir todos os técnicos administrativos em ordem alfabética pelo nome
-
-Outros requisitos para servidor:
-- o código, o CPF e o SIAPE do servidor não pode estar repetido.
-- as variáveis com "*" não podem estar vazios ou em branco para um funcionário.
-
-As funcionalidades para veículos são:
-- inserir uma nova veículo
-- alterar uma veículo existente
-- excluir uma veículo
-- mostrar/imprimir dados de uma veículo com base no código
-- mostrar/imprimir todas as veículos de um servidor
-- mostrar/imprimir todas as veículos de um servidor em ordem alfabética pelo nome
-
-Outros requisitos para disciplina:
-- o código e a descrição do veículo não pode estar repetido
-- o código do servidor deve ser um código cadastrado para algum servidor
-- as variáveis com "*" não podem estar vazios ou em branco para um dependente.
-- codigo é o index dele danisse, um contador generico.
-
-
-Planejamento MURRO:
+Planejamento UI:
 Tela inicial:
     Espero ele entrar com enter pra continuar
     -> padronizar nome das funcoes do codigo
@@ -134,4 +79,111 @@ Escolher servidor existente:
 
 
 
+Chat:
+
+    Sim
+    meudeus muito ruim não ter direito o que seguir
+    até li o livro que ele indicou mas ainda assim não contém tudo que ele ensina
+    os modos que prefere que o codigo seja feito ele so fala na aula ao vivo
+
+
+
+
+
+
+PseudoCodigo Fluxo CRUD:
+ 
+Criar:
+    pedir campos da struct
+    checar uniquidade do campo inserido
+    iterar arquivo e ve se há espaço vazio
+    se não existir
+        append struct no file
+    se existir
+        sobrescreve naquela posicao livre
+
+Editar:
+    pegar struct por codigo
+    se nao existir 
+        retorna false
+    printa struct
+    perguntar campo a campo se va querer editar ou não
+    se quiser
+        edita campo 
+        se for campo unico
+            checar uniquidade do campo inserido
+    sobrescreve struct alterada no arquivo na posicao achada
+
+Excluir:
+    pegar struct por codigo
+    se nao existir 
+        retorna false
+    setar flag ocupada pra 0
+    printa struct
+    sobrescreve struct alterada no arquivo na posicao achada
+    retorna true
+
+Ler por código:
+    pegar struct por codigo
+    se nao existir 
+        retorna false
+    printa struct
+    retorna true
+
+Ler todos:
+    se não existir registro
+        avisa na tela
+    itera arquivo inteiro
+    pega struct na posicao
+    printa struct
+    retorna true;
+
+Ler todos em ordem alfabetica(filtro):
+    itera arquivo inteiro
+    pega struct na posicao
+    tranforma em tupla com o campo a ser ordenado (nome/descricao)
+    ordena tuplas
+    itera tuplas 
+        pega struct na posicao da tupla
+        filtro não existir || filtro for satisfeito
+            printa struct na posicao do tupla
+    fechar arquivo
+
+
+Pegar position struct por campo escolhido
+    pedir codigo do objeto
+    itera arquivo
+        se achar
+            fecha arquivo
+            retorna posicao
+    fecha arquivo
+    retorna -1
+
+Printar struct na posicao:
+    abrir arquivo na posicao
+    printstruct
+    fecha arquivo
+
+
+Achar posicao livre nas structs do arquivo:
+    pegar posicao struct por campo is free
+    se posicao == -1
+        return false
+    return true
+
+Append no arquivo:
+    abre arquivo pra append
+    escreve struct
+    fecha
+
+Sobrescreve arquivo na posicao:
+    abre arquivo na posicao
+    escreve struct
+    fecha
+
+Checar uniquidade:
+    pegar posicao struct por campo inserido
+    se posicao != -1 e != posicao_a_ignorar
+        return false
+    return true
 

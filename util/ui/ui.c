@@ -1,4 +1,5 @@
 #include "ui.h"
+#include "../utils.h"
 //
 //// get the vehicle description from the user
 //char* getVehicleDescriptionFromUserInput(){
@@ -33,7 +34,7 @@
 //  return getMandatoryIntegerFieldFromUserInput(position, "Digite a posição do veículo: ");
 //}
 //
-//char getWillFromUserInput(){
-//  char will[255];
-//  return getMandatoryWillFieldFromUserInput(will);
-//}
+char getWillFromUserInput(){
+ char will[255];
+ return getMandatoryWillFieldFromUserInput(will);
+}

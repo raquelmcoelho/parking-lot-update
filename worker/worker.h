@@ -6,51 +6,69 @@
 #ifndef UTILS_H
 #include "../util/utils.h"
 #endif
-//int variavel2 = 20;
+typedef enum {
+    null_type,
+    administrative_technician,
+    teacher
+} type;
 
-bool createWorkerUI();
-bool updateWorkerUI();
-bool deleteWorkerUI();
-bool readOneWorkerUI();
+// typedef struct {
+//     //obrigatórios
+//     char code[255];
+//     char name[255];
+//     char siape[255];
+//     char cpf[255];
+//     char birthday[255];
+//     // opcionais
+//     char rg[255];
+//     char address[255];
+//     char wage[255];
+//     type type;
+//     unsigned short status: 1;
+// } worker;
+
+typedef enum {
+    field_code,
+    field_name,
+    field_siape,
+    field_cpf,
+    field_birthday,
+    field_rg,
+    field_address,
+    field_wage,
+    field_type
+} field;
+
+
+// Struct Functions
 worker createWorker(char* code, char* name, char* siape, char* cpf, char* birthday, char *rg, char *address, char *wage, type type);
+void readWorker(worker w);
+
+// File
+FILE* getFileWorkers();
+int getPositionByField(field field);
+void printStructAtPosition(int position);
 
 
 
+// Ui
+//obrigatórios
+char* getCodeFromMandatoryUserInput();
+char* getNameFromMandatoryUserInput();
+char* getSiapeFromMandatoryUserInput();
+char* getCpfFromMandatoryUserInput();
+char* getBirthdayFromMandatoryUserInput();
+// opcionais
+char* getRgFromUserInput();
+char* getAddressFromUserInput();
+char* getWageFromUserInput();
+type getTypeFromUserInput();
 
 
-
-
-// DEPRACATED
-
-// // Functions for Workers
-// // - inserir novo servidor --
-// bool insertNewServer();
-// // - alterar um servidor existente —
-// bool alterServer(int position);
-// // - excluir um servidor —
-// void deleteServer(int position);
-// // - mostrar/imprimir dados de um servidor com base no código –
-// void read();
-// // - mostrar/imprimir todos os servidores -
-// void readAll();
-// // - mostrar/imprimir todos os servidores em ordem alfabética pelo nome -
-// void readAllOrderByName();
-// // - mostrar/imprimir todos os professores em ordem alfabética pelo nome -
-// void teacherOrderByName();
-// // - mostrar/imprimir todos os técnicos administrativos em ordem alfabética pelo nome -
-// void technicianOrderByName();
-
-
-
-// // Auxiliares
-// // - checar se existe codigo, cpf, siape e retornar id da position-
-// int checkExists(char value[], int columnNumber);
-// // - checar campos obrigatórios e se estão preenchidas corretamente-
-// // - as variáveis com "*" não podem estar vazios ou em branco para um funcionário.
-// bool checkItsComplete(int data);
-// // - print at position -
-// void printAtPosition(int position);
-// // Facade to initialize columns with null value
-// void initializeWorkerColumns();
-// // See all database
-// void seeDatabase();
+// Facade
+bool createWorkerFacade();
+bool updateWorkerFacade();
+bool deleteWorkerFacade();
+bool readOneWorkerFacade();
+bool readWorkersFacade();
+bool readWorkersAlphabeticallyFacade();

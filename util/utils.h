@@ -43,6 +43,12 @@
     exit_program
 } option;
 
+typedef enum status_enum
+{
+    deleted = 0,
+    active = 1
+} status;
+
 
 // Enum for Workers Type
 typedef enum {
@@ -63,6 +69,7 @@ typedef struct {
     char address[255];
     char wage[255];
     type type;
+    unsigned short int status : 1;
 } worker;
 
 typedef struct {
@@ -84,13 +91,7 @@ typedef struct {
 } node;
 
 
-
-
-
-
-
-
-
+bool fileExists(char *fileName);
 
 // DEPRACATED
 
@@ -131,7 +132,7 @@ int getMandatoryIntegerFieldFromUserInput(char* field, char msg[]);
 char* getStringFieldFromUserInput(char* field, char msg[]);
 int getIntegerFieldFromUserInput(char* field, char msg[]);
 char getMandatoryWillFieldFromUserInput();
-
+bool checkStringIsNumber(char string[255]);
 
 // get the first vacant position in an array
 int getFirstVacantPosition(bool array[], int n);
@@ -146,5 +147,8 @@ int findStringInArray(char array[][255], int n, char string[]);
 int getFirstVacantIndex(bool array[], int n);
 
 char* getDivider();
+
+
+
 
 
