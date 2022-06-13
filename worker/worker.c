@@ -125,21 +125,21 @@ bool updateWorkerFacade(){
         return false;
     }
 
-    printf("Deseja alterar o nome?(s/n) \n", w.name);
+    printf("Deseja alterar o nome?(s/n) \n");
     // TODO: getMandatoryWill()
-    printf("Deseja alterar o siape?(s/n) \n", w.siape);
+    printf("Deseja alterar o siape?(s/n) \n");
     // TODO: getMandatoryWill()
-    printf("Deseja alterar o cpf?(s/n) \n", w.cpf);
+    printf("Deseja alterar o cpf?(s/n) \n");
     // TODO: getMandatoryWill()
-    printf("Deseja alterar a data de nascimento?(s/n) \n", w.birthday);
+    printf("Deseja alterar a data de nascimento?(s/n) \n");
     // TODO: getMandatoryWill()
-    printf("Deseja alterar o rg?(s/n) \n", w.rg);
+    printf("Deseja alterar o rg?(s/n) \n");
     // TODO: getMandatoryWill()
-    printf("Deseja alterar o endereço?(s/n) \n", w.address);
+    printf("Deseja alterar o endereço?(s/n) \n");
     // TODO: getMandatoryWill()
-    printf("Deseja alterar o salário?(s/n) \n", w.wage);
+    printf("Deseja alterar o salário?(s/n) \n");
     // TODO: getMandatoryWill()
-    printf("Deseja alterar o tipo?(s/n) \n", w.type);
+    printf("Deseja alterar o tipo?(s/n) \n");
     // TODO: getTypeLabel()
     // TODO: getMandatoryWill()
     return true;

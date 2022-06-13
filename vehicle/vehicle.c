@@ -1,12 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
-#include <ctype.h> /* Função toupper*/
 
-#include "../util/ui/ui.h"
+#include "vehicle.h"
 
-#include "../util/utils.h"
+
 
 #ifdef DEBUG
 #define DEBUG_PRINTF(...)             \
@@ -359,7 +354,7 @@ void readVehiclesInAlphabeticalOrder(bool ofWorkerMode)
             break;
 
         v[i].index = i;
-        stpcpy(v[i].description, vehicle.description);
+        strcpy(v[i].description, vehicle.description);
         v[i].workerCode = vehicle.workerCode;
         v[i].status = vehicle.status;
     }
@@ -395,7 +390,8 @@ void readVehiclesInAlphabeticalOrder(bool ofWorkerMode)
         numberOfShownVehicles++;
     }
 
-    if(numberOfShownVehicles == 0)
+    if(numberOfShownVehicles == 0){
         printf("Nenhum veículo encontrado\n");
         showBlockingMessage();
+    }
 }

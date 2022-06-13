@@ -1,6 +1,5 @@
-#include "util/utils.h"
-// #include "worker/worker.h"
-#include "vehicle/vehicle.h"
+#include "worker/worker.c"
+#include "vehicle/vehicle.c"
 
 
 
@@ -8,7 +7,7 @@ int main(){
     setlocale(LC_ALL, "Portuguese");
 
     int choice = 0;
-    char choiceVessel[2];
+    char choiceVessel[3];
     bool success = false;
 
     if(!(fileExists("vehicle_database.bin"))){
@@ -34,9 +33,7 @@ int main(){
         printf("%s 13- Ler os veículos de um servidor                                        %s\n", green, normal);
         printf("%s 14- Ler os veículos de um servidor em ordem alfabética          %s\n", green, normal);
         printf("%s 100- sair                                                       %s\n", red, normal);
-        // printf("%s Entre com o número da sua opção:                                %s\n", cyan, normal);
 
-        // TODO: getIntFromUser()
         choice = getMandatoryIntegerFieldFromUserInput(choiceVessel, "Entre com o número da sua opção:  ");
 
         switch(choice){
@@ -73,37 +70,30 @@ int main(){
                 success = true;
                 break;
             case create_vehicle:
-                // printf("você escolheu criar_veiculo\n");
                 createVehicle();
                 success = true;
                 break;
             case update_vehicle:
-                // printf("você escolheu editar_veiculo\n");
                 updateVehicle();
                 success = true;
                 break;
             case delete_vehicle:
-                // printf("você escolheu deletar_veiculo\n");
                 deleteVehicle();
                 success = true;
                 break;
             case read_one_vehicle:
-                // printf("você escolheu ler_um_veiculo\n");
                 showVehicleByCode();
                 success = true;
                 break;
             case read_vehicles_worker:
-                // printf("você escolheu ler_veiculos_servidor\n");
                 readVehiclesInAlphabeticalOrder(1);
                 success = true;
                 break;
             case read_vehicles_worker_alphabetically:
-                // printf("você escolheu ler_veiculos_servidor_alfabetica:     \n");
                 readVehiclesInAlphabeticalOrder(1);
                 success = true;
                 break;
             case read_all_vehicles:
-                // printf("você escolheu ler_veiculos_servidor_alfabetica:     \n");
                 readVehiclesInAlphabeticalOrder(0);
                 success = true;
                 break;

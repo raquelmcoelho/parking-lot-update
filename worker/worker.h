@@ -6,26 +6,6 @@
 #ifndef UTILS_H
 #include "../util/utils.h"
 #endif
-typedef enum {
-    null_type,
-    administrative_technician,
-    teacher
-} type;
-
-// typedef struct {
-//     //obrigatórios
-//     char code[255];
-//     char name[255];
-//     char siape[255];
-//     char cpf[255];
-//     char birthday[255];
-//     // opcionais
-//     char rg[255];
-//     char address[255];
-//     char wage[255];
-//     type type;
-//     unsigned short status: 1;
-// } worker;
 
 typedef enum {
     field_code,
