@@ -17,18 +17,6 @@
 #endif
 
 
-// struct vehicle
-
-typedef struct struct_vehicle
-{
-    char licensePlate[255];
-    char description[255];
-    char brand[255];
-    char model[255];
-    int workerCode;
-    int status : 1;
-} VEHICLE;
-
 // read all the vehicles on the file vehicle_database.bin,
 // put all of them on a list and return such list
 VEHICLE **_getAllvehicles()
@@ -68,45 +56,7 @@ void _readVehicle(VEHICLE *vehicle)
     vehicle->status = active;
 }
 
-void _showVehicle(VEHICLE vehicle)
-{
-    printf("Placa: %s\n", vehicle.licensePlate);
-    printf("Descrição: %s\n", vehicle.description);
-    printf("Marca: %s\n", vehicle.brand);
-    printf("Modelo: %s\n", vehicle.model);
-    printf("Código do Trabalhador: %d\n", vehicle.workerCode);
-}
 
-void _insertVehicleIntoDatabase(VEHICLE vehicle)
-{
-    FILE *fp;
-    fp = fopen("vehicle_database.bin", "r+b");
-    fseek(fp, 0L, SEEK_END);
-    if (fwrite(&vehicle, sizeof(vehicle), 1, fp) != 1)
-        printf("Falhou a escrita do registro");
-    fclose(fp);
-}
-
-int _countStoredStructs()
-{
-    FILE *fp;
-    fp = fopen("vehicle_database.bin", "r+b");
-    fseek(fp, 0L, SEEK_END);
-    int size = ftell(fp);
-    fclose(fp);
-    return size / sizeof(VEHICLE);
-}
-
-void _showVehicleByIndex(int position)
-{
-    FILE *fp;
-    VEHICLE vehicle;
-    fp = fopen("vehicle_database.bin", "r+b");
-    fseek(fp, position * sizeof(VEHICLE), SEEK_SET);
-    fread(&vehicle, sizeof(VEHICLE), 1, fp);
-    _showVehicle(vehicle);
-    fclose(fp);
-}
 
 // pedir campos da struct
 // checar uniquidade do campo inserido
@@ -328,7 +278,7 @@ typedef struct ordering_alg_tuple
 void readVehiclesInAlphabeticalOrder(bool ofWorkerMode)
 {
     VEHICLE vehicle;
-    tuple4 v[_countStoredStructs()];
+    tuple4 v[_countStoredVehicleStructs()];
     FILE *fp;
     int i = 0;
     int workerCode = -1;
@@ -347,7 +297,7 @@ void readVehiclesInAlphabeticalOrder(bool ofWorkerMode)
         fflush(stdin);
     }
 
-    for (int i = 0; i < _countStoredStructs(); i++)
+    for (int i = 0; i < _countStoredVehicleStructs(); i++)
     {
 
         if (fread(&vehicle, sizeof(vehicle), 1, fp) != 1)
@@ -360,9 +310,9 @@ void readVehiclesInAlphabeticalOrder(bool ofWorkerMode)
     }
 
     // Bubble sort
-    for (int i = 0; i < _countStoredStructs(); i++)
+    for (int i = 0; i < _countStoredVehicleStructs(); i++)
     {
-        for (int j = 0; j < _countStoredStructs() - 1; j++)
+        for (int j = 0; j < _countStoredVehicleStructs() - 1; j++)
         {
 
             if (strcmp(v[j].description, v[j + 1].description) > 0)
@@ -380,7 +330,7 @@ void readVehiclesInAlphabeticalOrder(bool ofWorkerMode)
     int numberOfShownVehicles = 0;
 
     // For each index in the list, show the i-th vehicle
-    for (int i = 0; i < _countStoredStructs(); i++)
+    for (int i = 0; i < _countStoredVehicleStructs(); i++)
     {
         if (v[i].status == deleted || (ofWorkerMode && v[i].workerCode != workerCode))
             continue;

@@ -57,33 +57,46 @@ typedef enum {
 
 typedef struct {
     //obrigatórios
-    char code[255];
-    char name[255];
+    int code;
     char siape[255];
     char cpf[255];
-    char birthday[255];
-    // opcionais
     char rg[255];
+    char name[255];
+    char birthday[255];
     char address[255];
     char wage[255];
     type type;
-    unsigned short int status : 1;
-} worker;
+    int status : 1;
+} WORKER;
 
-typedef struct {
-    char worker_code[255];
-    //obrigatórios
-    char vehicle_code[255];
+typedef struct struct_vehicle
+{
+    char licensePlate[255];
     char description[255];
-    char licence_plate[255];
     char brand[255];
     char model[255];
-} vehicle;
+    int workerCode;
+    int status : 1;
+} VEHICLE;
 
 typedef struct {
     union {
-        worker w;
-        vehicle v;
+        WORKER w;
+        VEHICLE v;
     };
+    int index;
     unsigned short int is_free: 1;
 } node;
+
+typedef enum {
+    field_code = 0,
+    field_siape = field_code + sizeof(int),
+    field_cpf = field_siape + (sizeof(char) * 255),
+    field_rg = field_cpf + (sizeof(char) * 255),
+} fieldPosition;
+
+
+typedef union {
+    int integer;
+    char string[255];
+} value;

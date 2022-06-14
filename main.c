@@ -15,6 +15,11 @@ int main(){
         fclose(file);
     }
 
+    if(!(fileExists("worker_database.bin"))){
+        FILE* file = fopen("worker_database.bin", "wb");
+        fclose(file);
+    }
+
 
     do{
         printf("\n\nMENU\n");
@@ -38,35 +43,27 @@ int main(){
 
         switch(choice){
             case create_worker:
-                // printf("você escolheu criar_servidor\n");
-                success = true;
+                success = createWorker();
                 break;
             case update_worker:
-                // printf("você escolheu editar_servidor\n");
                 success = false;
                 break;
             case delete_worker:
-                // printf("você escolheu deletar_servidor\n");
                 success = false;
                 break;
             case read_one_worker:
-                // printf("você escolheu ler_um_servidor\n");
                 success = false;
                 break;
             case read_workers:
-                // printf("você escolheu ler_servidores\n");
                 success = false;
                 break;
             case read_workers_alphabetically:
-                // printf("você escolheu ler_servidores_alfabetica\n");
                 success = true;
                 break;
             case read_technicians_alphabetically:
-                // printf("você escolheu ler_tecnicos_admnistrativos_alfabetica\n");
                 success = true;
                 break;
             case read_teachers_alphabetically:
-                // printf("você escolheu ler_professores_alfabetica\n");
                 success = true;
                 break;
             case create_vehicle:
