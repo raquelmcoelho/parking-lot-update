@@ -1,8 +1,6 @@
 
 #include "vehicle.h"
 
-
-
 #ifdef DEBUG
 #define DEBUG_PRINTF(...)             \
     do                                \
@@ -16,7 +14,6 @@
     } while (false)
 #endif
 
-
 // struct vehicle
 
 typedef struct struct_vehicle
@@ -29,10 +26,24 @@ typedef struct struct_vehicle
     int status : 1;
 } VEHICLE;
 
-// read all the vehicles on the file vehicle_database.bin,
-// put all of them on a list and return such list
-VEHICLE **_getAllvehicles()
+bool _verifyDescriptionExistisOnDatabase(char *description)
 {
+    bool descriptionExistisOnDatabase = false;
+    FILE *file = fopen("vehicle_database.bin", "rb");
+    if (file != NULL)
+    {
+        VEHICLE vehicle;
+        while (fread(&vehicle, sizeof(VEHICLE), 1, file) == 1)
+        {
+            if (strcmp(description, vehicle.description) == 0)
+            {
+                descriptionExistisOnDatabase = true;
+                break;
+            }
+        }
+    }
+    fclose(file);
+    return descriptionExistisOnDatabase;
 }
 
 /* Lê os dados  de um registro intrduzidos pelo usuário*/
@@ -44,14 +55,26 @@ void _readVehicle(VEHICLE *vehicle)
     char brand[255];
     char model[255];
     char workerCode[255];
+    bool descriptionAlreadyExists;
 
     // get license plate
     getMandatoryStringFieldFromUserInput(licensePlate, "Digite a placa do veículo: ");
     strcpy(vehicle->licensePlate, licensePlate);
 
-    // get description
-    getMandatoryStringFieldFromUserInput(description, "Digite a descrição do veículo: ");
-    strcpy(vehicle->description, description);
+    do
+    {
+        // get description
+        getMandatoryStringFieldFromUserInput(description, "Digite a descrição do veículo: ");
+        strcpy(vehicle->description, description);
+        // description must be unique, so we assert that it is not on database
+        descriptionAlreadyExists = _verifyDescriptionExistisOnDatabase(vehicle->description);
+
+        if (descriptionAlreadyExists)
+        {
+            printf("Já existe um veículo com essa descrição.\n");
+            printf("Por vavor, insira outra descrição.\n");
+        }
+    } while (descriptionAlreadyExists);
 
     // get brand
     getMandatoryStringFieldFromUserInput(brand, "Digite a marca do veículo: ");
@@ -155,7 +178,7 @@ void showVehicleByCode()
     // read the vehicle
     fread(&vehicle, sizeof(VEHICLE), 1, fp);
 
-    if(vehicle.status != deleted)
+    if (vehicle.status != deleted)
     {
         _showVehicle(vehicle);
         showBlockingMessage();
@@ -177,7 +200,6 @@ void deleteVehicle()
     char resp;
 
     char vehicleCodeVessel[255];
-
 
     fp = fopen("vehicle_database.bin", "r+b");
 
@@ -273,7 +295,7 @@ void updateVehicle()
 
     printf("Código do Veículo a ser alterado: ");
     n_reg = getMandatoryIntegerFieldFromUserInput(vehicleCodeVessel, "Digite o código do veículo: ");
-    
+
     fflush(stdin);
     if (fseek(fp, (n_reg - 1) * sizeof(VEHICLE), SEEK_SET) != 0)
     {
@@ -390,8 +412,9 @@ void readVehiclesInAlphabeticalOrder(bool ofWorkerMode)
         numberOfShownVehicles++;
     }
 
-    if(numberOfShownVehicles == 0){
+    if (numberOfShownVehicles == 0)
+    {
         printf("Nenhum veículo encontrado\n");
-        showBlockingMessage();
     }
+    showBlockingMessage();
 }
