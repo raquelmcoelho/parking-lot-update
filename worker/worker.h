@@ -12,5 +12,3 @@ bool createWorker();
 bool updateWorker();
 bool deleteWorker();
 int readOneWorker(bool returnPosition);
-bool readWorkers();
-bool readWorkersAlphabetically();

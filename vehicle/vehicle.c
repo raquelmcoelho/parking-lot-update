@@ -271,13 +271,6 @@ void updateVehicle()
     fflush(fp); /*Despejar os Dados no Disco Rígido*/
 }
 
-typedef struct ordering_alg_tuple
-{
-    int index;
-    char description[255];
-    int workerCode;
-    int status : 1;
-} tuple4;
 
 //     itera arquivo inteiro
 //     pega struct na posicao
@@ -300,7 +293,7 @@ typedef struct ordering_alg_tuple
 void readVehiclesInAlphabeticalOrder(bool ofWorkerMode)
 {
     VEHICLE vehicle;
-    tuple4 v[_countStoredVehicleStructs()];
+    tuple_order_vehicle v[_countStoredVehicleStructs()];
     FILE *fp;
     int i = 0;
     int workerCode = -1;
@@ -340,7 +333,7 @@ void readVehiclesInAlphabeticalOrder(bool ofWorkerMode)
             if (strcmp(v[j].description, v[j + 1].description) > 0)
             {
 
-                tuple4 aux = v[j];
+                tuple_order_vehicle aux = v[j];
 
                 v[j] = v[j + 1];
 

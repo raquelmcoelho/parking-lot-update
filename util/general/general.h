@@ -25,6 +25,8 @@
 
 #define worker_filename "worker_database.bin"
 #define vehicle_filename "vehicle_database.bin"
+
+                                        
 typedef enum {
     nothing,
     create_worker,
@@ -61,7 +63,6 @@ typedef enum {
 
 typedef struct {
     //obrigatórios
-    int status : 1;
     int code;
     char siape[255];
     char cpf[255];
@@ -71,6 +72,7 @@ typedef struct {
     char address[255];
     char wage[255];
     type type;
+    int status : 1;
 } WORKER;
 
 typedef struct struct_vehicle
@@ -95,3 +97,49 @@ typedef union {
     int integer;
     char string[255];
 } value;
+
+typedef struct 
+{
+    int index;
+    char name[255];
+    type type;
+    int status : 1;
+} tuple_order_worker;
+
+typedef struct
+{
+    int index;
+    char description[255];
+    int workerCode;
+    int status : 1;
+} tuple_order_vehicle;
+
+char* getDivider()
+{
+    char* _line = malloc(sizeof(char) * 255);
+    for(register int i = 0; i < 150; i++){
+        _line[i] = '-';
+    }
+    _line[255] = '\0';
+    return _line;
+}
+
+void showCustomBlockingMessage(char *msg)
+{
+    printf("%s\n", msg);
+    fflush(stdin);
+    getchar();
+    fflush(stdin);
+    getchar();
+    fflush(stdin);
+}
+
+void showBlockingMessage()
+{
+    printf("%s", PRESS_ANY_KEY_TO_CONTINUE);
+    fflush(stdin);
+    getchar();
+    fflush(stdin);
+    getchar();
+    fflush(stdin);
+}

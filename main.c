@@ -10,6 +10,10 @@ int main(){
     char choiceVessel[4];
     bool success = false;
 
+    value v;
+    v.integer = 3;
+    _getWorkerIndexBySearch(field_code, v);
+
     do{
         printf("\n\nMENU\n");
         printf("%s 1 - Adicionar servidor                                           %s\n", cyan, normal);
@@ -24,7 +28,7 @@ int main(){
         printf("%s 10- Alterar veículo                                             %s\n", green, normal);
         printf("%s 11- Deletar veículo                                             %s\n", green, normal);
         printf("%s 12- Ler veículo                                                 %s\n", green, normal);
-        printf("%s 13- Ler os veículos de um servidor                                        %s\n", green, normal);
+        printf("%s 13- Ler os veículos de um servidor                              %s\n", green, normal);
         printf("%s 14- Ler os veículos de um servidor em ordem alfabética          %s\n", green, normal);
         printf("%s 100- sair                                                       %s\n", red, normal);
 
@@ -48,12 +52,15 @@ int main(){
                 success = true;
                 break;
             case read_workers_alphabetically:
+                _showAllWorkersAlphabetically(null_type);
                 success = true;
                 break;
             case read_technicians_alphabetically:
+                _showAllWorkersAlphabetically(administrative_technician);
                 success = true;
                 break;
             case read_teachers_alphabetically:
+                _showAllWorkersAlphabetically(teacher);
                 success = true;
                 break;
             case create_vehicle:
@@ -98,10 +105,12 @@ int main(){
         fflush(stdin);
 
         if(success){
-            printf("\n%sA operação foi bem sucedida%s\n", green, normal);
+            printf("\n%sA operação foi bem sucedida%s\n\n", green, normal);
         } else {
-            printf("\n%sA operação não foi concluída%s\n", red, normal);
+            printf("\n%sA operação não foi concluída%s\n\n", red, normal);
         }
+
+        showBlockingMessage();
 
     } while (choice != exit_program);
 }

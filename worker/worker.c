@@ -54,7 +54,7 @@ bool updateWorker(){
 
     worker = _getWorkerByIndex(position);
 
-    printf("Deseja alterar o nome?(s/n) \n");
+    printf("\nDeseja alterar o nome?(s/n) \n");
     if(getWillFromUserInput()){
         strcpy(worker.name, getWorkerNameFromUserInput());
     }
@@ -68,7 +68,7 @@ bool updateWorker(){
             strcpy(worker.siape, getWorkerSiapeFromUserInput());
             strcpy(searchQuery.string, worker.siape);
             positionFindBySearch = _getWorkerIndexBySearch(field_siape, searchQuery);
-        } while (positionFindBySearch != -1);
+        } while (positionFindBySearch != -1 && positionFindBySearch != worker.code);
     }
 
 
@@ -81,7 +81,7 @@ bool updateWorker(){
             strcpy(worker.cpf, getWorkerCpfFromUserInput());
             strcpy(searchQuery.string, worker.cpf);
             positionFindBySearch = _getWorkerIndexBySearch(field_cpf, searchQuery);
-        } while (positionFindBySearch != -1);
+        } while (positionFindBySearch != -1 && positionFindBySearch != worker.code);
     }
 
 

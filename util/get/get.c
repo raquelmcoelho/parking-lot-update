@@ -94,15 +94,19 @@ bool getWillFromUserInput(){
 bool getMandatoryWillFieldFromUserInput(){
   char will;
   do {
+    fflush(stdin);
     will = getchar();
+    fflush(stdin);
   } while (will != 's' && will != 'n');
   return (will == 's');
 }
 
 int getIntegerFieldFromUserInput(char* field, char msg[]){
+    fflush(stdin);
     printf("\n%s\n", msg);
     fgets(field, 255, stdin);
     field[strlen(field) - 1] = '\0';
+    fflush(stdin);
     return atoi(field);
 }
 
@@ -137,8 +141,11 @@ char* removeTrailingAndLeadingSpaces(char* string){
 
 
 char* getStringFieldFromUserInput(char* field, char msg[]){
+    fflush(stdin);
     printf("\n%s\n", msg);
     fgets(field, 255, stdin);
+    fflush(stdin);
+    printf("funcao pegar string kk");
     return removeTrailingAndLeadingSpaces(field);
 }
 

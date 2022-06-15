@@ -6,10 +6,6 @@
 #include "file_handler/file_handler.c"
 #endif //FILE_HANDLER_H
 
-#ifndef PUT_H
-#include "put/put.c"
-#endif //PUT_H
-
 #ifndef GET_H
 #include "get/get.c"
 #endif //GET_H
