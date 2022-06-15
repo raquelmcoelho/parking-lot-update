@@ -15,12 +15,6 @@ int main(){
         fclose(file);
     }
 
-    if(!(fileExists("worker_database.bin"))){
-        FILE* file = fopen("worker_database.bin", "wb");
-        fclose(file);
-    }
-
-
     do{
         printf("\n\nMENU\n");
         printf("%s 1 - Adicionar servidor                                           %s\n", cyan, normal);
@@ -55,6 +49,7 @@ int main(){
                 success = false;
                 break;
             case read_workers:
+                _showAllWorkers();
                 success = false;
                 break;
             case read_workers_alphabetically:

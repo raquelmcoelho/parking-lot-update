@@ -8,7 +8,7 @@
 
 void _showAllWorkers();
 void _showAllVehicles();
-int _getWorkerBySearch(fieldPosition field, value value, bool searchWithString);
+int _getWorkerIndexBySearch(fieldPosition fieldOffset, value valueToSearch);
 
 void _insertVehicleIntoDatabase(VEHICLE vehicle);
 void _insertWorkerIntoDatabase(WORKER worker);
@@ -21,6 +21,7 @@ void _showWorkerByIndex(int position);
 void _showVehicle(VEHICLE vehicle);
 void _showWorker(WORKER worker);
 
+FILE* _getFile(char* filename);
 
 // achar espaço em branco
 // sobrescrever

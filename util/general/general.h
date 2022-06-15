@@ -7,7 +7,8 @@
 #include <stdbool.h>
 #include <string.h>
 #include <locale.h>
-#include <ctype.h> 
+#include <ctype.h>
+#include <stddef.h>
 
 #define PRESS_ANY_KEY_TO_CONTINUE "Pressione qualquer tecla para continuar   .    .    ."
 
@@ -21,6 +22,8 @@
 #define white "\x1B[37m"
 #define normal "\x1B[0m"
 
+#define worker_filename "worker_database.bin"
+#define vehicle_filename "vehicle_database.bin"
 typedef enum {
     nothing,
     create_worker,
@@ -89,10 +92,10 @@ typedef struct {
 } node;
 
 typedef enum {
-    field_code = 0,
-    field_siape = field_code + sizeof(int),
-    field_cpf = field_siape + (sizeof(char) * 255),
-    field_rg = field_cpf + (sizeof(char) * 255),
+    field_code = offsetof(WORKER, code),
+    field_siape = offsetof(WORKER, siape),
+    field_cpf = offsetof(WORKER, cpf),
+    field_rg = offsetof(WORKER, rg),
 } fieldPosition;
 
 

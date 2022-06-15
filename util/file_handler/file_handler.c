@@ -6,7 +6,7 @@ void _showAllWorkers()
     FILE *fp;
     int position = 0;
     WORKER worker;
-    fp = fopen("worker_database.bin", "rb+");
+    fp = _getFile(worker_filename);
     fseek(fp, 0L, SEEK_SET);
     while(position < _countStoredWorkerStructs()){
         printf("position: %d\n", position);
@@ -33,29 +33,31 @@ void _showAllVehicles()
     fclose(fp);
 }
 
-int _getWorkerBySearch(fieldPosition field, value value, bool searchWithString){
+int _getWorkerIndexBySearch(fieldPosition fieldOffset, value valueToSearch){
     FILE *fp;
-    int position = 0;
     WORKER worker;
-    WORKER *wpointer = &worker;
-    fp = fopen("worker_database.bin", "rb+");
+    int position = 0;
+    fp = _getFile(worker_filename);
     fseek(fp, 0L, SEEK_SET);
-    printf("\n\n\nworker step size: %d como deveria ser %d", (unsigned int) field, (sizeof(char) * 255) + sizeof(int));
 
     while(position < _countStoredWorkerStructs()){
         fread(&worker, sizeof(WORKER), 1, fp);
         printf("\nposition: %d", position);
-        if(searchWithString){
-            printf("\nworker value to search: %s", value.string);
-            // printf("\nworker valor achado no field: %s", *(wpointer + ((unsigned int) field)));
-
+        if(fieldOffset != field_code){
+            char* valueFinded = ((char*)&worker + (size_t)fieldOffset);
+            printf("\nworker value to search: %s", valueToSearch.string);
+            printf("\nworker valor achado no field: %s", valueFinded);
+            if(strcmp(valueFinded, valueToSearch.string) == 0) return position;
         } else {
-            printf("\nworker value to search: %d", value.integer);
-            printf("\nworker valor achado no field: %d", *(wpointer + (unsigned int) field));
+            int valueFinded = *(int*)((char*)&worker + (size_t)fieldOffset);
+            printf("\nworker value to search: %d", valueToSearch.integer);
+            printf("\nworker valor achado no field: %d\n", valueFinded);
+            if(valueFinded == valueToSearch.integer) return position;
         }
         position++;
     }
     fclose(fp);
+    return -1;
 }
 
 void _insertVehicleIntoDatabase(VEHICLE vehicle)
@@ -73,7 +75,7 @@ void _insertWorkerIntoDatabase(WORKER worker)
     // TODO: fluxo de achar posição com status 0 para sobreescrever
     FILE *fp;
     worker.code = _countStoredWorkerStructs();
-    fp = fopen("worker_database.bin", "rb+");
+    fp = _getFile(worker_filename);
     fseek(fp, 0L, SEEK_END);
     if (fwrite(&worker, sizeof(worker), 1, fp) != 1)
         printf("Falhou a escrita do registro");
@@ -87,12 +89,12 @@ int _countStoredVehicleStructs()
 
 int _countStoredWorkerStructs()
 {
-    return _getSizeFile("worker_database.bin") / sizeof(WORKER);
+    return _getSizeFile(worker_filename) / sizeof(WORKER);
 }
 
 int _getSizeFile(char *filename){
     FILE *fp;
-    fp = fopen(filename, "rb+");
+    fp = _getFile(filename);
     fseek(fp, 0L, SEEK_END);
     int size = ftell(fp);
     fclose(fp);
@@ -126,7 +128,7 @@ void _showWorkerByIndex(int position)
 {
     FILE *fp;
     WORKER worker;
-    fp = fopen("worker_database.bin", "rb+");
+    fp = _getFile(worker_filename);
     fseek(fp, position * sizeof(WORKER), SEEK_SET);
     fread(&worker, sizeof(WORKER), 1, fp);
     _showWorker(worker);
@@ -167,4 +169,21 @@ void _showWorker(WORKER worker){
                 break;
         }
     }
+}
+
+FILE* _getFile(char* filename){
+    FILE* file;
+
+    if(!(fileExists(filename))){
+        file = fopen(filename, "wb+");
+    }
+
+    file = fopen(filename, "rb+");
+    
+    if (file == NULL){
+        printf("Erro ao abrir o arquivo\n");
+        exit(1);
+    }
+
+    return file;
 }
