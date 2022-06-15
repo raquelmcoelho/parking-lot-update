@@ -85,20 +85,29 @@ type getWorkerTypeFromUserInput(){
 }
 
 
-
-char getWillFromUserInput(){
+bool getWillFromUserInput(){
     char will[255];
     return getMandatoryWillFieldFromUserInput(will);
 }
 
 
+bool getMandatoryWillFieldFromUserInput(){
+  char will;
+  do {
+    will = getchar();
+  } while (will != 's' && will != 'n');
+  return (will == 's');
+}
+
 int getIntegerFieldFromUserInput(char* field, char msg[]){
     printf("\n%s\n", msg);
     fgets(field, 255, stdin);
+    field[strlen(field) - 1] = '\0';
     return atoi(field);
 }
 
 bool checkStringIsNumber(char string[255]){
+    if(strlen(string) == 0) return false;
     for(unsigned int i = 0; i < strlen(string); i++){
         if(isalpha(string[i]) || !isdigit(string[i])){
             return false;
@@ -127,7 +136,6 @@ char* removeTrailingAndLeadingSpaces(char* string){
 }
 
 
-// get a string field from the user
 char* getStringFieldFromUserInput(char* field, char msg[]){
     printf("\n%s\n", msg);
     fgets(field, 255, stdin);
@@ -135,7 +143,6 @@ char* getStringFieldFromUserInput(char* field, char msg[]){
 }
 
 
-// get a mandatory string field from the user
 char* getMandatoryStringFieldFromUserInput(char* field, char msg[]){
   char* sanitizedString;
   do {
@@ -144,22 +151,13 @@ char* getMandatoryStringFieldFromUserInput(char* field, char msg[]){
   return sanitizedString;
 }
 
-char getMandatoryWillFieldFromUserInput(){
-  char will;
-  do {
-    will = getchar();
-  } while (will != 's' && will != 'n');
-  return will;
-}
-
-// get a mandatory integer field from the user
 int getMandatoryIntegerFieldFromUserInput(char* field, char msg[]){
   int integer;
 
   do
   {
     integer = getIntegerFieldFromUserInput(field, msg);
-  } while (integer == 0);
+  } while (!checkStringIsNumber(field));
 
   return integer;
 }

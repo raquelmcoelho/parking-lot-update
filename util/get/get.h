@@ -26,8 +26,8 @@ int getPositionFromUserInput();
 bool checkStringIsNumber(char string[255]);
 char* removeTrailingAndLeadingSpaces(char* string);
 
-char getWillFromUserInput();
-char getMandatoryWillFieldFromUserInput();
+bool getWillFromUserInput();
+bool getMandatoryWillFieldFromUserInput();
 int getIntegerFieldFromUserInput(char* field, char msg[]);
 int getMandatoryIntegerFieldFromUserInput(char* field, char msg[]);
 char* getStringFieldFromUserInput(char* field, char msg[]);

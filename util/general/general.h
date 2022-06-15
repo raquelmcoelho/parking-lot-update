@@ -12,6 +12,7 @@
 
 #define PRESS_ANY_KEY_TO_CONTINUE "Pressione qualquer tecla para continuar   .    .    ."
 
+
 // Colors to use in terminal
 #define red "\x1B[31m"
 #define green "\x1B[32m"
@@ -41,14 +42,14 @@ typedef enum {
     read_vehicles_worker,
     read_vehicles_worker_alphabetically,
     read_all_vehicles, // extra
-    exit_program
+    exit_program = 100
 } option;
 
 typedef enum status_enum
 {
     deleted = 0,
     active = 1
-} status;
+} status_enum;
 
 
 // Enum for Workers Type
@@ -60,6 +61,7 @@ typedef enum {
 
 typedef struct {
     //obrigatórios
+    int status : 1;
     int code;
     char siape[255];
     char cpf[255];
@@ -69,7 +71,6 @@ typedef struct {
     char address[255];
     char wage[255];
     type type;
-    int status : 1;
 } WORKER;
 
 typedef struct struct_vehicle
@@ -81,21 +82,12 @@ typedef struct struct_vehicle
     int workerCode;
     int status : 1;
 } VEHICLE;
-
-typedef struct {
-    union {
-        WORKER w;
-        VEHICLE v;
-    };
-    int index;
-    unsigned short int is_free: 1;
-} node;
-
+    
 typedef enum {
     field_code = offsetof(WORKER, code),
     field_siape = offsetof(WORKER, siape),
     field_cpf = offsetof(WORKER, cpf),
-    field_rg = offsetof(WORKER, rg),
+    field_rg = offsetof(WORKER, rg)
 } fieldPosition;
 
 

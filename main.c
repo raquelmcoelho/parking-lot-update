@@ -7,13 +7,8 @@ int main(){
     setlocale(LC_ALL, "Portuguese");
 
     int choice = 0;
-    char choiceVessel[3];
+    char choiceVessel[4];
     bool success = false;
-
-    if(!(fileExists("vehicle_database.bin"))){
-        FILE* file = fopen("vehicle_database.bin", "wb");
-        fclose(file);
-    }
 
     do{
         printf("\n\nMENU\n");
@@ -40,17 +35,17 @@ int main(){
                 success = createWorker();
                 break;
             case update_worker:
-                success = false;
+                success = updateWorker();
                 break;
             case delete_worker:
-                success = false;
+                success = deleteWorker();
                 break;
             case read_one_worker:
-                success = false;
+                success = (bool) readOneWorker(false);
                 break;
             case read_workers:
                 _showAllWorkers();
-                success = false;
+                success = true;
                 break;
             case read_workers_alphabetically:
                 success = true;

@@ -17,7 +17,7 @@
 bool _verifyDescriptionExistisOnDatabase(char *description)
 {
     bool descriptionExistisOnDatabase = false;
-    FILE *file = fopen("vehicle_database.bin", "rb");
+    FILE *file = _getFile(vehicle_filename);;
     if (file != NULL)
     {
         VEHICLE vehicle;
@@ -60,7 +60,7 @@ void _readVehicle(VEHICLE *vehicle)
         if (descriptionAlreadyExists)
         {
             printf("Já existe um veículo com essa descrição.\n");
-            printf("Por vavor, insira outra descrição.\n");
+            printf("Por favor, insira outra descrição.\n");
         }
     } while (descriptionAlreadyExists);
 
@@ -115,7 +115,7 @@ void showVehicleByCode()
     char vehicleCodeVessel[255];
     vehicleCode = getMandatoryIntegerFieldFromUserInput(vehicleCodeVessel, "Digite o código do veículo: ");
 
-    fp = fopen("vehicle_database.bin", "rb");
+    fp = _getFile(vehicle_filename);
     if (fp == NULL)
     {
         printf("Erro ao abrir o arquivo\n");
@@ -151,7 +151,7 @@ void deleteVehicle()
 
     char vehicleCodeVessel[255];
 
-    fp = fopen("vehicle_database.bin", "r+b");
+    fp = _getFile(vehicle_filename);
 
     printf("Código do veículo a ser apagado: ");
     // scanf("%ld", &n_reg);
@@ -204,7 +204,7 @@ void readAllVehicles()
 {
     VEHICLE vehicle;
     FILE *fp;
-    fp = fopen("vehicle_database.bin", "rb");
+    fp = _getFile(vehicle_filename);
     if (fp == NULL)
     {
         printf("Erro ao abrir o arquivo\n");
@@ -241,7 +241,7 @@ void updateVehicle()
 
     char vehicleCodeVessel[255];
 
-    fp = fopen("vehicle_database.bin", "r+b");
+    fp = _getFile(vehicle_filename);
 
     printf("Código do Veículo a ser alterado: ");
     n_reg = getMandatoryIntegerFieldFromUserInput(vehicleCodeVessel, "Digite o código do veículo: ");
@@ -306,7 +306,7 @@ void readVehiclesInAlphabeticalOrder(bool ofWorkerMode)
     int workerCode = -1;
     char workerCodeVessel[255];
 
-    fp = fopen("vehicle_database.bin", "rb");
+    fp = _getFile(vehicle_filename);
     if (fp == NULL)
     {
         printf("Erro ao abrir o arquivo\n");

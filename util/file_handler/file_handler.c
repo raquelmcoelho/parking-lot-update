@@ -4,15 +4,13 @@
 void _showAllWorkers()
 {
     FILE *fp;
-    int position = 0;
     WORKER worker;
     fp = _getFile(worker_filename);
     fseek(fp, 0L, SEEK_SET);
-    while(position < _countStoredWorkerStructs()){
-        printf("position: %d\n", position);
-        fread(&worker, sizeof(WORKER), 1, fp);
-        _showWorker(worker);
-        position++;
+    while(fread(&worker, sizeof(WORKER), 1, fp) == 1){
+        if(worker.status != deleted){
+            _showWorker(worker);
+        }
     }
     fclose(fp);
 }
@@ -20,15 +18,13 @@ void _showAllWorkers()
 void _showAllVehicles()
 {
     FILE *fp;
-    int position = 0;
     VEHICLE vehicle;
-    fp = fopen("vehicle_database.bin", "rb+");
+    fp = _getFile(vehicle_filename);
     fseek(fp, 0L, SEEK_SET);
-    while(position < _countStoredVehicleStructs()){
-        printf("position: %d\n", position);
-        fread(&vehicle, sizeof(VEHICLE), 1, fp);
-        _showVehicle(vehicle);
-        position++;
+    while(fread(&vehicle, sizeof(VEHICLE), 1, fp) == 1){
+        if(vehicle.status != deleted){
+            _showVehicle(vehicle);
+        }
     }
     fclose(fp);
 }
@@ -40,19 +36,15 @@ int _getWorkerIndexBySearch(fieldPosition fieldOffset, value valueToSearch){
     fp = _getFile(worker_filename);
     fseek(fp, 0L, SEEK_SET);
 
-    while(position < _countStoredWorkerStructs()){
-        fread(&worker, sizeof(WORKER), 1, fp);
-        printf("\nposition: %d", position);
-        if(fieldOffset != field_code){
+    while(fread(&worker, sizeof(VEHICLE), 1, fp) == 1){
+        if(worker.status != deleted){
             char* valueFinded = ((char*)&worker + (size_t)fieldOffset);
-            printf("\nworker value to search: %s", valueToSearch.string);
-            printf("\nworker valor achado no field: %s", valueFinded);
-            if(strcmp(valueFinded, valueToSearch.string) == 0) return position;
-        } else {
-            int valueFinded = *(int*)((char*)&worker + (size_t)fieldOffset);
-            printf("\nworker value to search: %d", valueToSearch.integer);
-            printf("\nworker valor achado no field: %d\n", valueFinded);
-            if(valueFinded == valueToSearch.integer) return position;
+
+            if(fieldOffset != field_code){
+                if(strcmp(valueFinded, valueToSearch.string) == 0) return position;
+            } else {
+                if(*(int*)valueFinded == valueToSearch.integer) return position;
+            }
         }
         position++;
     }
@@ -60,31 +52,48 @@ int _getWorkerIndexBySearch(fieldPosition fieldOffset, value valueToSearch){
     return -1;
 }
 
+int _getFirstIndexFreeForWorker(){
+    FILE *fp;
+    WORKER worker;
+    int position = 0;
+    fp = _getFile(worker_filename);
+    fseek(fp, 0L, SEEK_SET);
+
+    while(fread(&worker, sizeof(WORKER), 1, fp) == 1){
+        if(worker.status == deleted) return position;
+        position++;
+    }
+
+    fclose(fp);
+    return position;
+}
+
 void _insertVehicleIntoDatabase(VEHICLE vehicle)
 {
     FILE *fp;
-    fp = fopen("vehicle_database.bin", "rb+");
+    fp = _getFile(vehicle_filename);
     fseek(fp, 0L, SEEK_END);
-    if (fwrite(&vehicle, sizeof(vehicle), 1, fp) != 1)
+    if(fwrite(&vehicle, sizeof(vehicle), 1, fp) != 1)
         printf("Falhou a escrita do registro");
     fclose(fp);
 }
 
-void _insertWorkerIntoDatabase(WORKER worker)
+bool _insertWorkerIntoDatabase(WORKER worker)
 {
-    // TODO: fluxo de achar posição com status 0 para sobreescrever
     FILE *fp;
-    worker.code = _countStoredWorkerStructs();
     fp = _getFile(worker_filename);
-    fseek(fp, 0L, SEEK_END);
-    if (fwrite(&worker, sizeof(worker), 1, fp) != 1)
+    fseek(fp, (long)worker.code * sizeof(WORKER), SEEK_SET);
+    if(fwrite(&worker, sizeof(worker), 1, fp) != 1){
         printf("Falhou a escrita do registro");
+        return false;
+    }
     fclose(fp);
+    return true;
 }
 
 int _countStoredVehicleStructs()
 {
-    return _getSizeFile("vehicle_database.bin") / sizeof(VEHICLE);
+    return _getSizeFile(vehicle_filename) / sizeof(VEHICLE);
 }
 
 int _countStoredWorkerStructs()
@@ -104,7 +113,7 @@ int _getSizeFile(char *filename){
 bool fileExists(char *fileName)
 {
     FILE *file = fopen(fileName, "r");
-    if (file == NULL)
+    if(file == NULL)
     {
     return false;
     }
@@ -117,57 +126,62 @@ void _showVehicleByIndex(int position)
 {
     FILE *fp;
     VEHICLE vehicle;
-    fp = fopen("vehicle_database.bin", "rb+");
+    fp = _getFile(vehicle_filename);
     fseek(fp, position * sizeof(VEHICLE), SEEK_SET);
-    fread(&vehicle, sizeof(VEHICLE), 1, fp);
-    _showVehicle(vehicle);
+    if(fread(&vehicle, sizeof(VEHICLE), 1, fp) == 1){
+        _showVehicle(vehicle);
+    }
     fclose(fp);
 }
 
 void _showWorkerByIndex(int position)
 {
-    FILE *fp;
-    WORKER worker;
-    fp = _getFile(worker_filename);
-    fseek(fp, position * sizeof(WORKER), SEEK_SET);
-    fread(&worker, sizeof(WORKER), 1, fp);
-    _showWorker(worker);
-    fclose(fp);
+    _showWorker(_getWorkerByIndex(position));
 }
 
+WORKER _getWorkerByIndex(int position)
+{
+    WORKER workerReturned, workerTested;
+    if(position <= _countStoredWorkerStructs() && position >= 0){
+        FILE *fp;
+        fp = _getFile(worker_filename);
+        fseek(fp, position * sizeof(WORKER), SEEK_SET);
+        if(fread(&workerTested, sizeof(WORKER), 1, fp) == 1){
+            workerReturned = workerTested;
+        }
+        fclose(fp);
+    }
+    return workerReturned;
+}
 
 void _showVehicle(VEHICLE vehicle)
 {
-    if(vehicle.status){
-        printf("Placa: %s\n", vehicle.licensePlate);
-        printf("Descrição: %s\n", vehicle.description);
-        printf("Marca: %s\n", vehicle.brand);
-        printf("Modelo: %s\n", vehicle.model);
-        printf("Código do Trabalhador: %d\n", vehicle.workerCode);
-    }
+    printf("Placa: %s\n", vehicle.licensePlate);
+    printf("Descrição: %s\n", vehicle.description);
+    printf("Marca: %s\n", vehicle.brand);
+    printf("Modelo: %s\n", vehicle.model);
+    printf("Código do Trabalhador: %d\n", vehicle.workerCode);
 }
 
 void _showWorker(WORKER worker){
-    if(worker.status){
-        printf("Código:  %d\n", worker.code);
-        printf("Nome: %s\n", worker.name);
-        printf("SIAPE: %s\n", worker.siape);
-        printf("Cpf: %s\n", worker.cpf);
-        printf("Data de nascimento: %s\n", worker.birthday);
-        printf("RG: %s\n", worker.rg);
-        printf("Endereço: %s\n", worker.address);    
-        printf("Salário: %s\n", worker.wage);
-        switch(worker.type){
-            case 1:
-                printf("Tipo: %s\n", "Técnico Admnistrativo");
-                break;
-            case 2:
-                printf("Tipo: %s\n", "Professor");
-                break;
-            default:
-                printf("Tipo: %s\n", "Sem tipo");
-                break;
-        }
+    printf("Código:  %d\n", worker.code);
+    printf("Nome: %s\n", worker.name);
+    printf("SIAPE: %s\n", worker.siape);
+    printf("Cpf: %s\n", worker.cpf);
+    printf("Data de nascimento: %s\n", worker.birthday);
+    printf("RG: %s\n", worker.rg);
+    printf("Endereço: %s\n", worker.address);    
+    printf("Salário: %s\n", worker.wage);
+    switch(worker.type){
+        case 1:
+            printf("Tipo: %s\n", "Técnico Admnistrativo");
+            break;
+        case 2:
+            printf("Tipo: %s\n", "Professor");
+            break;
+        default:
+            printf("Tipo: %s\n", "Sem tipo");
+            break;
     }
 }
 
@@ -180,7 +194,7 @@ FILE* _getFile(char* filename){
 
     file = fopen(filename, "rb+");
     
-    if (file == NULL){
+    if(file == NULL){
         printf("Erro ao abrir o arquivo\n");
         exit(1);
     }
