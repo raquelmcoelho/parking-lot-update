@@ -3,7 +3,7 @@
 void _showAllWorkersAlphabetically(type filter){
     WORKER worker;
     FILE* fp = _getFile(worker_filename);
-    int sizeFile = _countStoredWorkerStructs();
+    const int sizeFile = _countStoredWorkerStructs();
     tuple_order_worker v[sizeFile];
 
     // populating tuples
@@ -11,32 +11,28 @@ void _showAllWorkersAlphabetically(type filter){
         if (fread(&worker, sizeof(WORKER), 1, fp) != 1)
             break;
 
-        v[count].index = count;
+        v[count].index = worker.code;
         strcpy(v[count].name, worker.name);
         v[count].type = worker.type;
         v[count].status = worker.status;
     }
 
     // bubble sort
-    for (int i = 0; i < _countStoredVehicleStructs(); i++)
+    for (int i = 0; i < sizeFile; i++)
     {
-        for (int j = 0; j < _countStoredVehicleStructs() - 1; j++)
+        for (int j = 0; j < sizeFile - 1 - i; j++)
         {
-
             if (strcmp(v[j].name, v[j + 1].name) > 0)
             {
-
                 tuple_order_worker aux = v[j];
-
                 v[j] = v[j + 1];
-
                 v[j + 1] = aux;
             }
         }
     }
 
     // show all filtered and ordered
-    for(int index; index < sizeFile; index++){
+    for(int index = 0; index < sizeFile; index++){
         if(filter == v[index].type || filter == 0){
             if(v[index].status != deleted){
                 _showWorkerByIndex(v[index].index);
@@ -58,15 +54,12 @@ int _getWorkerIndexBySearch(fieldPosition fieldOffset, value valueToSearch){
     while(fread(&worker, sizeof(WORKER), 1, fp) == 1){
         if(worker.status != deleted){
             char* valueFinded = ((char*)&worker + (size_t)fieldOffset);
-            printf("\nPesquisando: valueFinded = %s, valueToSearch = %s, é igual? %d\n", valueFinded, valueToSearch.string, (strcmp(valueFinded, valueToSearch.string) == 0));
 
             if(fieldOffset != field_code){
+            printf("\nSearching: valueFinded = %s, valueToSearch = %s, is equal? %d\n", valueFinded, valueToSearch.string, (strcmp(valueFinded, valueToSearch.string) == 0));
                 if(strcmp(valueFinded, valueToSearch.string) == 0) return position;
-                printf(" é igual? %d\n ", strcmp(valueFinded, valueToSearch.string) == 0);
             } else {
-                printf("entrando no inteiro");
-                printf("\nPesquisando: valueFinded = %d  valueToSearch = %d ", *(int*)valueFinded, valueToSearch.integer);
-                printf(" é igual? %d\n ", valueFinded == valueToSearch.integer);
+                printf("\nSearching: valueFinded = %d  valueToSearch = %d, is equal? %d", *(int*)valueFinded, valueToSearch.integer, *(int*)valueFinded == valueToSearch.integer);
                 if(*(int*)valueFinded == valueToSearch.integer) return position;
             }
         }

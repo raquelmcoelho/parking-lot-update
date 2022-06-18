@@ -56,9 +56,9 @@ typedef enum status_enum
 
 // Enum for Workers Type
 typedef enum {
-    null_type,
-    administrative_technician,
-    teacher
+    null_type = 0,
+    administrative_technician = 1,
+    teacher = 2
 } type;
 
 typedef struct {
@@ -116,11 +116,11 @@ typedef struct
 
 char* getDivider()
 {
-    char* _line = malloc(sizeof(char) * 255);
+    char* _line = calloc(255, sizeof(char));
     for(register int i = 0; i < 150; i++){
-        _line[i] = '-';
+        _line[i] = i == 0 || i == 149 ? '\n' : '-';
     }
-    _line[255] = '\0';
+    _line[254] = '\0';
     return _line;
 }
 

@@ -33,7 +33,7 @@ bool createWorker(){
     worker.type = getWorkerTypeFromUserInput();
     worker.status = active;
     worker.code = _getFirstIndexFreeForWorker();
-    printf("Primeiro índice livre achado: %d", worker.code);
+    printf("\nPrimeiro código livre achado: %d", worker.code);
 
     
     if(_insertWorkerIntoDatabase(worker)){
@@ -55,12 +55,12 @@ bool updateWorker(){
     worker = _getWorkerByIndex(position);
 
     printf("\nDeseja alterar o nome?(s/n) \n");
-    if(getWillFromUserInput()){
+    if(getMandatoryWillFieldFromUserInput()){
         strcpy(worker.name, getWorkerNameFromUserInput());
     }
 
     printf("Deseja alterar o siape?(s/n) \n");
-    if(getWillFromUserInput()){
+    if(getMandatoryWillFieldFromUserInput()){
         do{
             if(positionFindBySearch != -1 && positionFindBySearch != worker.code){
                 printf("\nEste SIAPE já está em nosso banco de dados!\n");
@@ -73,7 +73,7 @@ bool updateWorker(){
 
 
     printf("Deseja alterar o cpf?(s/n) \n");
-    if(getWillFromUserInput()){
+    if(getMandatoryWillFieldFromUserInput()){
         do{
             if(positionFindBySearch != -1 && positionFindBySearch != worker.code){
                 printf("\nEste CPF já está em nosso banco de dados!\n");
@@ -86,23 +86,23 @@ bool updateWorker(){
 
 
     printf("Deseja alterar a data de nascimento?(s/n) \n");
-    if(getWillFromUserInput()){
+    if(getMandatoryWillFieldFromUserInput()){
         strcpy(worker.birthday, getWorkerBirthdayFromUserInput());
     }
     printf("Deseja alterar o rg?(s/n) \n");
-    if(getWillFromUserInput()){
+    if(getMandatoryWillFieldFromUserInput()){
         strcpy(worker.rg, getWorkerRgFromUserInput());
     }
     printf("Deseja alterar o endereço?(s/n) \n");
-    if(getWillFromUserInput()){
+    if(getMandatoryWillFieldFromUserInput()){
         strcpy(worker.address, getWorkerAddressFromUserInput());
     }
     printf("Deseja alterar o salário?(s/n) \n");
-    if(getWillFromUserInput()){
+    if(getMandatoryWillFieldFromUserInput()){
         strcpy(worker.wage, getWorkerWageFromUserInput());
     }
     printf("Deseja alterar o tipo?(s/n) \n");
-    if(getWillFromUserInput()){
+    if(getMandatoryWillFieldFromUserInput()){
         worker.type = getWorkerTypeFromUserInput();
     }    
     
@@ -133,7 +133,7 @@ int readOneWorker(bool returnPosition){
     value searchQuery;
     int positionFindBySearch = -1;
 
-    printf("Insira o codigo do servidor que deseja:\n");
+    printf("\nInsira o codigo do servidor que deseja:\n");
     searchQuery.integer = getWorkerCodeFromUserInput();
     positionFindBySearch = _getWorkerIndexBySearch(field_code, searchQuery);
 
@@ -149,7 +149,7 @@ int readOneWorker(bool returnPosition){
         return returnPosition? -1 : 0;
     }
 
-    printf("Um registro foi encontrado:\n");
+    printf("\nUm registro foi encontrado:\n");
     _showWorker(worker);
     return returnPosition? worker.code : 1;
 }

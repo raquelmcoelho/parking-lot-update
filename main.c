@@ -10,9 +10,6 @@ int main(){
     char choiceVessel[4];
     bool success = false;
 
-    value v;
-    v.integer = 3;
-    _getWorkerIndexBySearch(field_code, v);
 
     do{
         printf("\n\nMENU\n");
@@ -22,8 +19,8 @@ int main(){
         printf("%s 4 - Ler servidor                                                 %s\n", cyan, normal);
         printf("%s 5 - Ler todos servidores                                         %s\n", cyan, normal);
         printf("%s 6 - Ler todos servidores por ordem alfabética                    %s\n", cyan, normal);
-        printf("%s 7 - Ler todos professores por ordem alfabética                   %s\n", cyan, normal);
-        printf("%s 8 - Ler todos técnicos admnistrativos por ordem alfabética       %s\n", cyan, normal);
+        printf("%s 7 - Ler todos técnicos admnistrativos por ordem alfabética       %s\n", cyan, normal);
+        printf("%s 8 - Ler todos professores por ordem alfabética                   %s\n", cyan, normal);
         printf("%s 9 - Adicionar veículo                                           %s\n", green, normal);
         printf("%s 10- Alterar veículo                                             %s\n", green, normal);
         printf("%s 11- Deletar veículo                                             %s\n", green, normal);
@@ -32,7 +29,7 @@ int main(){
         printf("%s 14- Ler os veículos de um servidor em ordem alfabética          %s\n", green, normal);
         printf("%s 100- sair                                                       %s\n", red, normal);
 
-        choice = getMandatoryIntegerFieldFromUserInput(choiceVessel, "Entre com o número da sua opção:  ");
+        choice = getMandatoryIntegerFieldFromUserInput(choiceVessel, "(obrigatório) Entre com o número da sua opção:  ");
 
         switch(choice){
             case create_worker:

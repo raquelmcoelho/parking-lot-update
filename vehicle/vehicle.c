@@ -179,7 +179,7 @@ void deleteVehicle()
     _showVehicle(vehicle);
 
     printf("\n\nApagar o Registro (s/n)???: ");
-    resp = getWillFromUserInput();
+    resp = getMandatoryWillFieldFromUserInput();
     fflush(stdin);
     if (toupper(resp) != 'S')
         return;

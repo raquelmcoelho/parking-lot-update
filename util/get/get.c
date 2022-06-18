@@ -85,12 +85,6 @@ type getWorkerTypeFromUserInput(){
 }
 
 
-bool getWillFromUserInput(){
-    char will[255];
-    return getMandatoryWillFieldFromUserInput(will);
-}
-
-
 bool getMandatoryWillFieldFromUserInput(){
   char will;
   do {
@@ -99,54 +93,6 @@ bool getMandatoryWillFieldFromUserInput(){
     fflush(stdin);
   } while (will != 's' && will != 'n');
   return (will == 's');
-}
-
-int getIntegerFieldFromUserInput(char* field, char msg[]){
-    fflush(stdin);
-    printf("\n%s\n", msg);
-    fgets(field, 255, stdin);
-    field[strlen(field) - 1] = '\0';
-    fflush(stdin);
-    return atoi(field);
-}
-
-bool checkStringIsNumber(char string[255]){
-    if(strlen(string) == 0) return false;
-    for(unsigned int i = 0; i < strlen(string); i++){
-        if(isalpha(string[i]) || !isdigit(string[i])){
-            return false;
-        }
-    }
-    return true;
-}
-
-
-// removes trailling and leading spaces from a string
-char* removeTrailingAndLeadingSpaces(char* string){
-    char* newString = malloc(sizeof(char) * 255);
-    int i = 0;
-    while(string[i] == ' '){
-        i++;
-    }
-    int j = 0;
-    while(string[strlen(string) - 1 - j] == ' '){
-        j++;
-    }
-    for(register unsigned int k = i; k < strlen(string) - j; k++){
-        newString[k - i] = string[k];
-    }
-    newString[strlen(string) - j -1] = '\0';
-    return newString;
-}
-
-
-char* getStringFieldFromUserInput(char* field, char msg[]){
-    fflush(stdin);
-    printf("\n%s\n", msg);
-    fgets(field, 255, stdin);
-    fflush(stdin);
-    printf("funcao pegar string kk");
-    return removeTrailingAndLeadingSpaces(field);
 }
 
 
@@ -170,3 +116,52 @@ int getMandatoryIntegerFieldFromUserInput(char* field, char msg[]){
 }
 
 
+
+int getIntegerFieldFromUserInput(char* field, char msg[]){
+    field = getStringFieldFromUserInput(field, msg);
+
+    return checkStringIsNumber(field) ? atoi(field) : 0;
+}
+
+char* getStringFieldFromUserInput(char* field, char msg[]){
+    fflush(stdin);
+    printf("\n%s\n", msg);
+    fgets(field, 255, stdin);
+    fflush(stdin);
+
+    strcpy(field, removeTrailingAndLeadingSpaces(field));
+    return field;
+}
+
+
+bool checkStringIsNumber(char string[255]){
+    if(strlen(string) == 0) return false;
+    for(unsigned int i = 0; i < strlen(string); i++){
+        if(isalpha(string[i]) || !isdigit(string[i])){
+            return false;
+        }
+    }
+    return true;
+}
+
+
+char* removeTrailingAndLeadingSpaces(char* string){
+    char* newString = calloc(255, sizeof(char));
+    unsigned int i = 0, j = 0, k = 0;
+
+    while(string[i] == ' ') {
+      i++;
+    }
+
+    while(string[strlen(string) - 1 - j] == ' ' || string[strlen(string) - 1 - j] == '\n') {
+      j++;
+    }
+
+    for(k = i; k < strlen(string) - j; k++){
+        newString[k - i] = string[k];
+    }
+
+    newString[ strlen(newString) ] = '\0';
+  
+    return newString;
+}
