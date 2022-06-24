@@ -8,91 +8,91 @@ int main(){
 
     int choice = 0;
     char choiceVessel[4];
-    bool success = false;
+    feedback feedback = false;
 
 
     do{
         printf("\n\nMENU\n");
-        printf("%s 1 - Adicionar servidor                                           %s\n", cyan, normal);
-        printf("%s 2 - Alterar servidor                                             %s\n", cyan, normal);
-        printf("%s 3 - Deletar servidor                                             %s\n", cyan, normal);
-        printf("%s 4 - Ler servidor                                                 %s\n", cyan, normal);
-        printf("%s 5 - Ler todos servidores                                         %s\n", cyan, normal);
-        printf("%s 6 - Ler todos servidores por ordem alfabética                    %s\n", cyan, normal);
-        printf("%s 7 - Ler todos técnicos admnistrativos por ordem alfabética       %s\n", cyan, normal);
-        printf("%s 8 - Ler todos professores por ordem alfabética                   %s\n", cyan, normal);
-        printf("%s 9 - Adicionar veículo                                           %s\n", green, normal);
-        printf("%s 10- Alterar veículo                                             %s\n", green, normal);
-        printf("%s 11- Deletar veículo                                             %s\n", green, normal);
-        printf("%s 12- Ler veículo                                                 %s\n", green, normal);
-        printf("%s 13- Ler os veículos de um servidor                              %s\n", green, normal);
-        printf("%s 14- Ler os veículos de um servidor em ordem alfabética          %s\n", green, normal);
-        printf("%s 100- sair                                                       %s\n", red, normal);
+        printf("%s  01 -  Adicionar servidor                                           %s\n", cyan,  normal);
+        printf("%s  02 -  Alterar servidor                                             %s\n", cyan,  normal);
+        printf("%s  03 -  Deletar servidor                                             %s\n", cyan,  normal);
+        printf("%s  04 -  Ler servidor                                                 %s\n", cyan,  normal);
+        printf("%s  05 -  Ler todos servidores                                         %s\n", cyan,  normal);
+        printf("%s  06 -  Ler todos servidores por ordem alfabética                    %s\n", cyan,  normal);
+        printf("%s  07 -  Ler todos técnicos admnistrativos por ordem alfabética       %s\n", cyan,  normal);
+        printf("%s  08 -  Ler todos professores por ordem alfabética                   %s\n", cyan,  normal);
+        printf("%s  09 -  Adicionar veículo                                            %s\n", green, normal);
+        printf("%s  10 -  Alterar veículo                                              %s\n", green, normal);
+        printf("%s  11 -  Deletar veículo                                              %s\n", green, normal);
+        printf("%s  12 -  Ler veículo                                                  %s\n", green, normal);
+        printf("%s  13 -  Ler os veículos de um servidor                               %s\n", green, normal);
+        printf("%s  14 -  Ler os veículos de um servidor em ordem alfabética           %s\n", green, normal);
+        printf("%s 100 -  Sair                                                         %s\n", red,   normal);
 
         choice = getMandatoryIntegerFieldFromUserInput(choiceVessel, "(obrigatório) Entre com o número da sua opção:  ");
 
         switch(choice){
             case create_worker:
-                success = createWorker();
+                feedback = createWorker() ? success : failed;
                 break;
             case update_worker:
-                success = updateWorker();
+                feedback = updateWorker() ? success : failed;
                 break;
             case delete_worker:
-                success = deleteWorker();
+                feedback = deleteWorker() ? success : failed;
                 break;
             case read_one_worker:
-                success = (bool) readOneWorker(false);
+                feedback = (bool) readOneWorker(false) ? success : failed;
                 break;
             case read_workers:
                 _showAllWorkers();
-                success = true;
+                feedback = pass;
                 break;
             case read_workers_alphabetically:
                 _showAllWorkersAlphabetically(null_type);
-                success = true;
+                feedback = pass;
                 break;
             case read_technicians_alphabetically:
                 _showAllWorkersAlphabetically(administrative_technician);
-                success = true;
+                feedback = pass;
                 break;
             case read_teachers_alphabetically:
                 _showAllWorkersAlphabetically(teacher);
-                success = true;
+                feedback = pass;
                 break;
             case create_vehicle:
                 createVehicle();
-                success = true;
+                feedback = pass;
                 break;
             case update_vehicle:
                 updateVehicle();
-                success = true;
+                feedback = pass;
                 break;
             case delete_vehicle:
                 deleteVehicle();
-                success = true;
+                feedback = pass;
                 break;
             case read_one_vehicle:
                 showVehicleByCode();
-                success = true;
+                feedback = pass;
                 break;
             case read_vehicles_worker:
                 readVehiclesInAlphabeticalOrder(1);
-                success = true;
+                feedback = pass;
                 break;
             case read_vehicles_worker_alphabetically:
                 readVehiclesInAlphabeticalOrder(1);
-                success = true;
+                feedback = pass;
                 break;
             case read_all_vehicles:
                 readVehiclesInAlphabeticalOrder(0);
-                success = true;
+                feedback = pass;
                 break;
             case exit_program:
                 // exit
                 printf("\n%sAté a próxima ☻♥%s\n", yellow, normal);
-                success = true;
-                exit(1);
+                feedback = pass;
+                exit(1); 
                 break;
             default:
                 printf("Entrada inválida\n");
@@ -101,9 +101,9 @@ int main(){
 
         fflush(stdin);
 
-        if(success){
+        if(feedback == success){
             printf("\n%sA operação foi bem sucedida%s\n\n", green, normal);
-        } else {
+        } else if (feedback == failed){
             printf("\n%sA operação não foi concluída%s\n\n", red, normal);
         }
 

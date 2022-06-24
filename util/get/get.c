@@ -86,13 +86,12 @@ type getWorkerTypeFromUserInput(){
 
 
 bool getMandatoryWillFieldFromUserInput(){
-  char will;
+  char will[255];
   do {
     fflush(stdin);
-    will = getchar();
-    fflush(stdin);
-  } while (will != 's' && will != 'n');
-  return (will == 's');
+    getStringFieldFromUserInput(will, "");
+  } while (strcmp(will,"s") && strcmp(will,"n"));
+  return (strcmp(will,"s") == 0);
 }
 
 
@@ -107,15 +106,12 @@ char* getMandatoryStringFieldFromUserInput(char* field, char msg[]){
 int getMandatoryIntegerFieldFromUserInput(char* field, char msg[]){
   int integer;
 
-  do
-  {
+  do{
     integer = getIntegerFieldFromUserInput(field, msg);
   } while (!checkStringIsNumber(field));
 
   return integer;
 }
-
-
 
 int getIntegerFieldFromUserInput(char* field, char msg[]){
     field = getStringFieldFromUserInput(field, msg);
@@ -125,10 +121,10 @@ int getIntegerFieldFromUserInput(char* field, char msg[]){
 
 char* getStringFieldFromUserInput(char* field, char msg[]){
     fflush(stdin);
-    printf("\n%s\n", msg);
+    if(strlen(msg)){
+      printf("\n%s\n", msg);
+    }
     fgets(field, 255, stdin);
-    fflush(stdin);
-
     strcpy(field, removeTrailingAndLeadingSpaces(field));
     return field;
 }
@@ -149,11 +145,11 @@ char* removeTrailingAndLeadingSpaces(char* string){
     char* newString = calloc(255, sizeof(char));
     unsigned int i = 0, j = 0, k = 0;
 
-    while(string[i] == ' ') {
+    while(string[i] == ' '){
       i++;
     }
 
-    while(string[strlen(string) - 1 - j] == ' ' || string[strlen(string) - 1 - j] == '\n') {
+    while(string[strlen(string) - 1 - j] == ' ' || string[strlen(string) - 1 - j] == '\n'){
       j++;
     }
 
@@ -162,6 +158,6 @@ char* removeTrailingAndLeadingSpaces(char* string){
     }
 
     newString[ strlen(newString) ] = '\0';
-  
+
     return newString;
 }

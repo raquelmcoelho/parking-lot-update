@@ -3,6 +3,7 @@
 void _showAllWorkersAlphabetically(type filter){
     WORKER worker;
     FILE* fp = _getFile(worker_filename);
+    bool hasWorkersToShow = false;
     const int sizeFile = _countStoredWorkerStructs();
     tuple_order_worker v[sizeFile];
 
@@ -36,12 +37,17 @@ void _showAllWorkersAlphabetically(type filter){
         if(filter == v[index].type || filter == 0){
             if(v[index].status != deleted){
                 _showWorkerByIndex(v[index].index);
+                hasWorkersToShow = true;
             }
         }
     }
 
-    fclose(fp);
+    // show users that workers registers are empty
+    if(!hasWorkersToShow){
+        printf("Não há servidores cadastrados");
+    }
 
+    fclose(fp);
 }
 
 int _getWorkerIndexBySearch(fieldPosition fieldOffset, value valueToSearch){
@@ -56,10 +62,10 @@ int _getWorkerIndexBySearch(fieldPosition fieldOffset, value valueToSearch){
             char* valueFinded = ((char*)&worker + (size_t)fieldOffset);
 
             if(fieldOffset != field_code){
-            printf("\nSearching: valueFinded = %s, valueToSearch = %s, is equal? %d\n", valueFinded, valueToSearch.string, (strcmp(valueFinded, valueToSearch.string) == 0));
+                // printf("\nSearching: valueFinded = %s, valueToSearch = %s, is equal? %d\n", valueFinded, valueToSearch.string, (strcmp(valueFinded, valueToSearch.string) == 0));
                 if(strcmp(valueFinded, valueToSearch.string) == 0) return position;
             } else {
-                printf("\nSearching: valueFinded = %d  valueToSearch = %d, is equal? %d", *(int*)valueFinded, valueToSearch.integer, *(int*)valueFinded == valueToSearch.integer);
+                // printf("\nSearching: valueFinded = %d  valueToSearch = %d, is equal? %d", *(int*)valueFinded, valueToSearch.integer, *(int*)valueFinded == valueToSearch.integer);
                 if(*(int*)valueFinded == valueToSearch.integer) return position;
             }
         }
@@ -105,10 +111,10 @@ bool _insertWorkerIntoDatabase(WORKER worker)
         printf("Falhou a escrita do registro");
         return false;
     }
+
     fclose(fp);
     return true;
 }
-
 
 void _showAllVehicles()
 {
@@ -128,13 +134,20 @@ void _showAllWorkers()
 {
     FILE *fp;
     WORKER worker;
+    bool hasWorkersToShow = false;
     fp = _getFile(worker_filename);
     fseek(fp, 0L, SEEK_SET);
     while(fread(&worker, sizeof(WORKER), 1, fp) == 1){
         if(worker.status != deleted){
             _showWorker(worker);
+            hasWorkersToShow = true;
         }
     }
+
+    if(!hasWorkersToShow){
+        printf("Não há servidores cadastrados");
+    }
+
     fclose(fp);
 }
 
@@ -183,11 +196,13 @@ VEHICLE _getVehicleByIndex(int position)
 
 void _showVehicle(VEHICLE vehicle)
 {
+    printf(getDivider());
     printf("Placa: %s\n", vehicle.licensePlate);
     printf("Descrição: %s\n", vehicle.description);
     printf("Marca: %s\n", vehicle.brand);
     printf("Modelo: %s\n", vehicle.model);
     printf("Código do Trabalhador: %d\n", vehicle.workerCode);
+    printf(getDivider());
 }
 
 void _showWorker(WORKER worker){
@@ -205,7 +220,7 @@ void _showWorker(WORKER worker){
             printf("Tipo: %s\n", "Técnico Admnistrativo");
             break;
         case 2:
-            printf("Tipo: %s\n", "Professor");
+            printf("Tipo: %s\n", "Docente");
             break;
         default:
             printf("Tipo: %s\n", "Sem tipo");

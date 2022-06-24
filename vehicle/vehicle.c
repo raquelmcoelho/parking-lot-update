@@ -14,20 +14,34 @@
     } while (false)
 #endif
 
+bool _verifyWorkerExistsOnDatabase(int code){
+    bool workerExistisOnDatabase = false;
+    FILE *file = _getFile(worker_filename);;
+    WORKER worker;
+    while (fread(&worker, sizeof(WORKER), 1, file) == 1)
+    {
+        if (code == worker.code && worker.status != deleted)
+        {
+            workerExistisOnDatabase = true;
+            break;
+        }
+    }
+    fclose(file);
+    return workerExistisOnDatabase;
+}
+
+
 bool _verifyDescriptionExistisOnDatabase(char *description)
 {
     bool descriptionExistisOnDatabase = false;
     FILE *file = _getFile(vehicle_filename);;
-    if (file != NULL)
+    VEHICLE vehicle;
+    while (fread(&vehicle, sizeof(VEHICLE), 1, file) == 1)
     {
-        VEHICLE vehicle;
-        while (fread(&vehicle, sizeof(VEHICLE), 1, file) == 1)
+        if (strcmp(description, vehicle.description) == 0)
         {
-            if (strcmp(description, vehicle.description) == 0)
-            {
-                descriptionExistisOnDatabase = true;
-                break;
-            }
+            descriptionExistisOnDatabase = true;
+            break;
         }
     }
     fclose(file);
@@ -44,15 +58,16 @@ void _readVehicle(VEHICLE *vehicle)
     char model[255];
     char workerCode[255];
     bool descriptionAlreadyExists;
+    bool workerExists;
 
     // get license plate
-    getMandatoryStringFieldFromUserInput(licensePlate, "Digite a placa do veículo: ");
+    getMandatoryStringFieldFromUserInput(licensePlate, "(obrigatório) Digite a placa do veículo: ");
     strcpy(vehicle->licensePlate, licensePlate);
 
     do
     {
         // get description
-        getMandatoryStringFieldFromUserInput(description, "Digite a descrição do veículo: ");
+        getMandatoryStringFieldFromUserInput(description, "(obrigatório) Digite a descrição do veículo: ");
         strcpy(vehicle->description, description);
         // description must be unique, so we assert that it is not on database
         descriptionAlreadyExists = _verifyDescriptionExistisOnDatabase(vehicle->description);
@@ -65,16 +80,22 @@ void _readVehicle(VEHICLE *vehicle)
     } while (descriptionAlreadyExists);
 
     // get brand
-    getMandatoryStringFieldFromUserInput(brand, "Digite a marca do veículo: ");
+    getMandatoryStringFieldFromUserInput(brand, "(obrigatório) Digite a marca do veículo: ");
     strcpy(vehicle->brand, brand);
 
     // get model
-    getMandatoryStringFieldFromUserInput(model, "Digite o modelo do veículo: ");
+    getMandatoryStringFieldFromUserInput(model, "(obrigatório) Digite o modelo do veículo: ");
     strcpy(vehicle->model, model);
 
     // get worker code
-    getMandatoryStringFieldFromUserInput(workerCode, "Digite o código do funcionário: ");
-    vehicle->workerCode = atoi(workerCode);
+    do{
+        vehicle->workerCode = getWorkerCodeFromUserInput();
+        workerExists = _verifyWorkerExistsOnDatabase(vehicle->workerCode);
+        if(!workerExists){
+            printf("O servidor não existe em nosso banco de dados.\n");
+            printf("Por favor, insira outro código.\n");
+        }
+    } while(!workerExists);
 
     vehicle->status = active;
 }
@@ -131,7 +152,6 @@ void showVehicleByCode()
     if (vehicle.status != deleted)
     {
         _showVehicle(vehicle);
-        showBlockingMessage();
     }
 }
 
@@ -147,7 +167,7 @@ void deleteVehicle()
     VEHICLE vehicle;
     FILE *fp;
     long int n_reg;
-    char resp;
+    bool resp;
 
     char vehicleCodeVessel[255];
 
@@ -181,7 +201,7 @@ void deleteVehicle()
     printf("\n\nApagar o Registro (s/n)???: ");
     resp = getMandatoryWillFieldFromUserInput();
     fflush(stdin);
-    if (toupper(resp) != 'S')
+    if (resp)
         return;
 
     vehicle.status = deleted;
@@ -217,7 +237,6 @@ void readAllVehicles()
             break;
         if (vehicle.status == deleted)
             continue;
-        printf("-----------------------------------------------------\n");
         _showVehicle(vehicle);
     }
 }
@@ -293,7 +312,8 @@ void updateVehicle()
 void readVehiclesInAlphabeticalOrder(bool ofWorkerMode)
 {
     VEHICLE vehicle;
-    tuple_order_vehicle v[_countStoredVehicleStructs()];
+    const int sizeFile = _countStoredVehicleStructs();
+    tuple_order_vehicle v[sizeFile];
     FILE *fp;
     int i = 0;
     int workerCode = -1;
@@ -312,7 +332,7 @@ void readVehiclesInAlphabeticalOrder(bool ofWorkerMode)
         fflush(stdin);
     }
 
-    for (int i = 0; i < _countStoredVehicleStructs(); i++)
+    for (int i = 0; i < sizeFile; i++)
     {
 
         if (fread(&vehicle, sizeof(vehicle), 1, fp) != 1)
@@ -325,9 +345,9 @@ void readVehiclesInAlphabeticalOrder(bool ofWorkerMode)
     }
 
     // Bubble sort
-    for (int i = 0; i < _countStoredVehicleStructs(); i++)
+    for (int i = 0; i < sizeFile; i++)
     {
-        for (int j = 0; j < _countStoredVehicleStructs() - 1; j++)
+        for (int j = 0; j < sizeFile - 1; j++)
         {
 
             if (strcmp(v[j].description, v[j + 1].description) > 0)
@@ -345,11 +365,10 @@ void readVehiclesInAlphabeticalOrder(bool ofWorkerMode)
     int numberOfShownVehicles = 0;
 
     // For each index in the list, show the i-th vehicle
-    for (int i = 0; i < _countStoredVehicleStructs(); i++)
+    for (int i = 0; i < sizeFile; i++)
     {
         if (v[i].status == deleted || (ofWorkerMode && v[i].workerCode != workerCode))
             continue;
-        printf("-----------------------------------------------------\n");
         printf("Código: %d\n", v[i].index + 1);
         _showVehicleByIndex(v[i].index);
         numberOfShownVehicles++;
@@ -359,5 +378,4 @@ void readVehiclesInAlphabeticalOrder(bool ofWorkerMode)
     {
         printf("Nenhum veículo encontrado\n");
     }
-    showBlockingMessage();
 }

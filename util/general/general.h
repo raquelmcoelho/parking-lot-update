@@ -114,6 +114,12 @@ typedef struct
     int status : 1;
 } tuple_order_vehicle;
 
+typedef enum {
+    failed = 0,
+    success = 1,
+    pass = 2
+} feedback;
+
 char* getDivider()
 {
     char* _line = calloc(255, sizeof(char));

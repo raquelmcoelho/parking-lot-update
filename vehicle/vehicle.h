@@ -10,6 +10,9 @@
 // struct vehicle
 
 
+bool _verifyWorkerExistsOnDatabase(int code);
+bool _verifyDescriptionExistisOnDatabase(char *description);
+
 
 // pedir campos da struct
 // checar uniquidade do campo inserido
