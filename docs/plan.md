@@ -187,3 +187,8 @@ Checar uniquidade:
         return false
     return true
 
+---
+
+TODO:
+Implementar cascade delete
+Ao deletar um servidor, deletar todos os veículos que ele tenha.

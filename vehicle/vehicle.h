@@ -23,7 +23,7 @@ bool _verifyDescriptionExistisOnDatabase(char *description);
 //     sobrescreve naquela posicao livre
 
 // create a new vehicle
-void createVehicle();
+feedback createVehicle();
 
 // pegar struct por codigo
 // se nao existir 
@@ -32,7 +32,7 @@ void createVehicle();
 // retorna true
 
 // read vehicle of certain position
-void showVehicleByCode();
+feedback showVehicleByCode();
 
 
 
@@ -43,7 +43,7 @@ void showVehicleByCode();
 // printa struct
 // sobrescreve struct alterada no arquivo na posicao achada
 // retorna true
-void deleteVehicle();
+feedback deleteVehicle();
 
 
 // se não existir registro
@@ -54,7 +54,7 @@ void deleteVehicle();
 // retorna true;
 
 // read all vehicles
-void readAllVehicles();
+feedback readAllVehicles();
 
 // pegar struct por codigo
 // se nao existir 
@@ -67,7 +67,7 @@ void readAllVehicles();
 //         checar uniquidade do campo inserido
 // sobrescreve struct alterada no arquivo na posicao achada
 // update an existing vehicle
-void updateVehicle();
+feedback updateVehicle();
 
 //     itera arquivo inteiro
 //     pega struct na posicao
@@ -87,4 +87,4 @@ void updateVehicle();
 // Such list is the indexes ordered by the description alphabetically
 // For each index in the list, show the i-th vehicle
 
-void readVehiclesInAlphabeticalOrder(bool ofWorkerMode);
+feedback readVehiclesInAlphabeticalOrder(bool ofWorkerMode);

@@ -111,7 +111,7 @@ void _readVehicle(VEHICLE *vehicle)
 //     sobrescreve naquela posicao livre
 
 // create a new vehicle
-void createVehicle()
+feedback createVehicle()
 {
 
     VEHICLE vehicle;
@@ -119,6 +119,8 @@ void createVehicle()
     _readVehicle(&vehicle);
     // add the vehicle to the database
     _insertVehicleIntoDatabase(vehicle);
+
+    return pass;
 }
 
 // pegar struct por codigo
@@ -127,22 +129,29 @@ void createVehicle()
 // printa struct
 // retorna true
 
+// 0 -> 1
+// 1 -> 2
+// 2 -> 3
+// --
+// 1 -> 1
+// 2 -> 2
+// 3 -> 3
+
 // read vehicle of certain position
-void showVehicleByCode()
+feedback showVehicleByCode()
 {
     VEHICLE vehicle;
     FILE *fp;
     int vehicleCode;
     char vehicleCodeVessel[255];
     vehicleCode = getMandatoryIntegerFieldFromUserInput(vehicleCodeVessel, "Digite o código do veículo: ");
-
+    vehicleCode--; // to make it 0-indexed. 1->0->1
     fp = _getFile(vehicle_filename);
     if (fp == NULL)
     {
         printf("Erro ao abrir o arquivo\n");
-        return;
+        return failed;
     }
-
     // fseek to the position of the vehicle
     fseek(fp, vehicleCode * sizeof(VEHICLE), SEEK_SET);
 
@@ -152,6 +161,10 @@ void showVehicleByCode()
     if (vehicle.status != deleted)
     {
         _showVehicle(vehicle);
+        return success;
+    } else {
+        printf("O veículo não existe.\n");
+        return failed;
     }
 }
 
@@ -162,7 +175,7 @@ void showVehicleByCode()
 // printa struct
 // sobrescreve struct alterada no arquivo na posicao achada
 // retorna true
-void deleteVehicle()
+feedback deleteVehicle()
 {
     VEHICLE vehicle;
     FILE *fp;
@@ -177,22 +190,20 @@ void deleteVehicle()
     // scanf("%ld", &n_reg);
     n_reg = getMandatoryIntegerFieldFromUserInput(vehicleCodeVessel, "Digite o código do veículo: ");
 
-    fflush(stdin);
-
     if (fseek(fp, (n_reg - 1) * sizeof(VEHICLE), SEEK_SET) != 0)
     {
         printf("Registro Inexistente ou Problemas no Posicionamento!!!");
-        return;
+        return failed;
     }
     if (fread(&vehicle, sizeof(VEHICLE), 1, fp) != 1)
     {
         printf("Problemas na leitura do Registro!!!");
-        return;
+        return failed;
     }
     if (vehicle.status == deleted)
     {
         printf("O registro já está apagado!!!\n\n");
-        return;
+        return failed;
     }
 
     printf("\n\nDados Atuais\n\n");
@@ -200,9 +211,10 @@ void deleteVehicle()
 
     printf("\n\nApagar o Registro (s/n)???: ");
     resp = getMandatoryWillFieldFromUserInput();
-    fflush(stdin);
-    if (resp)
-        return;
+    DEBUG_PRINTF("resp: %d\n", resp);
+    
+    if (!resp)
+        return pass;
 
     vehicle.status = deleted;
     // Recuar um Registro no Arquivo
@@ -210,6 +222,8 @@ void deleteVehicle()
     // Reescrever o Registro;
     fwrite(&vehicle, sizeof(VEHICLE), 1, fp);
     fflush(fp); /*Despejar os Dados no Disco Rígido*/
+
+    return success;
 }
 
 // se não existir registro
@@ -220,7 +234,7 @@ void deleteVehicle()
 // retorna true;
 
 // read all vehicles
-void readAllVehicles()
+feedback readAllVehicles()
 {
     VEHICLE vehicle;
     FILE *fp;
@@ -228,7 +242,7 @@ void readAllVehicles()
     if (fp == NULL)
     {
         printf("Erro ao abrir o arquivo\n");
-        return;
+        return failed;
     }
 
     while (1)
@@ -239,6 +253,7 @@ void readAllVehicles()
             continue;
         _showVehicle(vehicle);
     }
+    return success;
 }
 
 // pegar struct por codigo
@@ -252,7 +267,7 @@ void readAllVehicles()
 //         checar uniquidade do campo inserido
 // sobrescreve struct alterada no arquivo na posicao achada
 // update an existing vehicle
-void updateVehicle()
+feedback updateVehicle()
 {
     VEHICLE vehicle;
     FILE *fp;
@@ -269,13 +284,13 @@ void updateVehicle()
     if (fseek(fp, (n_reg - 1) * sizeof(VEHICLE), SEEK_SET) != 0)
     {
         printf("Registro Inexistente ou Problemas no Posicionamento!!!");
-        return;
+        return failed;
     }
 
     if (fread(&vehicle, sizeof(VEHICLE), 1, fp) != 1)
     {
         printf("Problemas na leitura do Registro!!!");
-        return;
+        return failed;
     }
 
     printf("\n\nDados Atuais\n\n");
@@ -288,6 +303,8 @@ void updateVehicle()
     // Reescrever o Registro;
     fwrite(&vehicle, sizeof(VEHICLE), 1, fp);
     fflush(fp); /*Despejar os Dados no Disco Rígido*/
+
+    return success;
 }
 
 
@@ -309,7 +326,7 @@ void updateVehicle()
 // Such list is the indexes ordered by the description alphabetically
 // For each index in the list, show the i-th vehicle
 
-void readVehiclesInAlphabeticalOrder(bool ofWorkerMode)
+feedback readVehiclesInAlphabeticalOrder(bool ofWorkerMode)
 {
     VEHICLE vehicle;
     const int sizeFile = _countStoredVehicleStructs();
@@ -323,7 +340,7 @@ void readVehiclesInAlphabeticalOrder(bool ofWorkerMode)
     if (fp == NULL)
     {
         printf("Erro ao abrir o arquivo\n");
-        return;
+        return failed;
     }
 
     if (ofWorkerMode)
@@ -369,7 +386,7 @@ void readVehiclesInAlphabeticalOrder(bool ofWorkerMode)
     {
         if (v[i].status == deleted || (ofWorkerMode && v[i].workerCode != workerCode))
             continue;
-        printf("Código: %d\n", v[i].index + 1);
+        printf("Código do Veículo: %d\n", v[i].index + 1);
         _showVehicleByIndex(v[i].index);
         numberOfShownVehicles++;
     }
@@ -377,5 +394,8 @@ void readVehiclesInAlphabeticalOrder(bool ofWorkerMode)
     if (numberOfShownVehicles == 0)
     {
         printf("Nenhum veículo encontrado\n");
+        return pass;
     }
+
+    return success;
 }

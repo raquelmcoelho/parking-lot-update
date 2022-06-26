@@ -196,17 +196,17 @@ VEHICLE _getVehicleByIndex(int position)
 
 void _showVehicle(VEHICLE vehicle)
 {
-    printf(getDivider());
+    printf("%s",getDivider());
     printf("Placa: %s\n", vehicle.licensePlate);
     printf("Descrição: %s\n", vehicle.description);
     printf("Marca: %s\n", vehicle.brand);
     printf("Modelo: %s\n", vehicle.model);
     printf("Código do Trabalhador: %d\n", vehicle.workerCode);
-    printf(getDivider());
+    printf("%s",getDivider());
 }
 
 void _showWorker(WORKER worker){
-    printf(getDivider());
+    printf("%s",getDivider());
     printf("\nCódigo:  %d\n", worker.code);
     printf("Nome: %s\n", worker.name);
     printf("SIAPE: %s\n", worker.siape);
@@ -226,7 +226,7 @@ void _showWorker(WORKER worker){
             printf("Tipo: %s\n", "Sem tipo");
             break;
     }
-    printf(getDivider());
+    printf("%s",getDivider());
 }
 
 

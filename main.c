@@ -61,32 +61,25 @@ int main(){
                 feedback = pass;
                 break;
             case create_vehicle:
-                createVehicle();
-                feedback = pass;
+                feedback = createVehicle();
                 break;
             case update_vehicle:
-                updateVehicle();
-                feedback = pass;
+                feedback = updateVehicle();
                 break;
             case delete_vehicle:
-                deleteVehicle();
-                feedback = pass;
+                feedback = deleteVehicle();
                 break;
             case read_one_vehicle:
-                showVehicleByCode();
-                feedback = pass;
+                feedback = showVehicleByCode();
                 break;
             case read_vehicles_worker:
-                readVehiclesInAlphabeticalOrder(1);
-                feedback = pass;
+                feedback = readVehiclesInAlphabeticalOrder(1);
                 break;
             case read_vehicles_worker_alphabetically:
-                readVehiclesInAlphabeticalOrder(1);
-                feedback = pass;
+                feedback = readVehiclesInAlphabeticalOrder(1);
                 break;
             case read_all_vehicles:
-                readVehiclesInAlphabeticalOrder(0);
-                feedback = pass;
+                feedback = readVehiclesInAlphabeticalOrder(0);
                 break;
             case exit_program:
                 // exit

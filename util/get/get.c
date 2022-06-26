@@ -85,10 +85,10 @@ type getWorkerTypeFromUserInput(){
 }
 
 
+
 bool getMandatoryWillFieldFromUserInput(){
   char will[255];
   do {
-    fflush(stdin);
     getStringFieldFromUserInput(will, "");
   } while (strcmp(will,"s") && strcmp(will,"n"));
   return (strcmp(will,"s") == 0);
