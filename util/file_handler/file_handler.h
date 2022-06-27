@@ -13,14 +13,12 @@ int _getFirstIndexFreeForWorker();
 void _insertVehicleIntoDatabase(VEHICLE vehicle);
 bool _insertWorkerIntoDatabase(WORKER worker);
 
-void _showAllVehicles();
 void _showAllWorkers();
 
 void _showVehicleByIndex(int position);
 void _showWorkerByIndex(int position);
 
 WORKER _getWorkerByIndex(int position);
-VEHICLE _getVehicleByIndex(int position);
 
 void _showVehicle(VEHICLE vehicle);
 void _showWorker(WORKER worker);

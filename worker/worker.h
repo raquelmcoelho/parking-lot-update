@@ -8,7 +8,8 @@
 #endif
 
 
-bool createWorker();
-bool updateWorker();
-bool deleteWorker();
+feedback createWorker();
+feedback updateWorker();
+void _deleteVehiclesOfWorker(int workerIndex);
+feedback deleteWorker();
 int readOneWorker(bool returnPosition);

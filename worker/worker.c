@@ -1,6 +1,6 @@
 #include "worker.h"
 
-bool createWorker()
+feedback createWorker()
 {
     WORKER worker;
     value searchQuery;
@@ -8,26 +8,22 @@ bool createWorker()
 
     strcpy(worker.name, getWorkerNameFromUserInput());
 
-    do
-    {
-        if (positionFindBySearch != -1)
-        {
-            printf("\nEste SIAPE já está em nosso banco de dados!\n");
-        }
+    do{
         strcpy(worker.siape, getWorkerSiapeFromUserInput());
         strcpy(searchQuery.string, worker.siape);
         positionFindBySearch = _getWorkerIndexBySearch(field_siape, searchQuery);
+        if(positionFindBySearch != -1){
+            printf("\nEste SIAPE já está em nosso banco de dados!\n");
+        }
     } while (positionFindBySearch != -1);
 
-    do
-    {
-        if (positionFindBySearch != -1)
-        {
-            printf("\nEste CPF já está em nosso banco de dados!\n");
-        }
+    do{
         strcpy(worker.cpf, getWorkerCpfFromUserInput());
         strcpy(searchQuery.string, worker.cpf);
         positionFindBySearch = _getWorkerIndexBySearch(field_cpf, searchQuery);
+        if(positionFindBySearch != -1){
+            printf("\nEste CPF já está em nosso banco de dados!\n");
+        }
     } while (positionFindBySearch != -1);
 
     strcpy(worker.birthday, getWorkerBirthdayFromUserInput());
@@ -43,24 +39,27 @@ bool createWorker()
     {
         printf("\nOs dados inseridos foram:\n");
         _showWorker(worker);
-        return true;
+        return success;
     }
     else
     {
-        return false;
+        return failed;
     }
 }
 
-bool updateWorker()
+feedback updateWorker()
 {
     WORKER worker;
     value searchQuery;
     int positionFindBySearch = -1;
     int position = readOneWorker(true);
     if (position == -1)
-        return false;
+        return failed;
 
     worker = _getWorkerByIndex(position);
+    if (worker.status == deleted)   // it means that get worker by index failed, because the status was already filtered  at search function
+        return failed;
+
 
     printf("\nDeseja alterar o nome?(s/n) \n");
     if (getMandatoryWillFieldFromUserInput())
@@ -73,13 +72,13 @@ bool updateWorker()
     {
         do
         {
+            strcpy(worker.siape, getWorkerSiapeFromUserInput());
+            strcpy(searchQuery.string, worker.siape);
+            positionFindBySearch = _getWorkerIndexBySearch(field_siape, searchQuery);
             if (positionFindBySearch != -1 && positionFindBySearch != worker.code)
             {
                 printf("\nEste SIAPE já está em nosso banco de dados!\n");
             }
-            strcpy(worker.siape, getWorkerSiapeFromUserInput());
-            strcpy(searchQuery.string, worker.siape);
-            positionFindBySearch = _getWorkerIndexBySearch(field_siape, searchQuery);
         } while (positionFindBySearch != -1 && positionFindBySearch != worker.code);
     }
 
@@ -88,13 +87,13 @@ bool updateWorker()
     {
         do
         {
+            strcpy(worker.cpf, getWorkerCpfFromUserInput());
+            strcpy(searchQuery.string, worker.cpf);
+            positionFindBySearch = _getWorkerIndexBySearch(field_cpf, searchQuery);
             if (positionFindBySearch != -1 && positionFindBySearch != worker.code)
             {
                 printf("\nEste CPF já está em nosso banco de dados!\n");
             }
-            strcpy(worker.cpf, getWorkerCpfFromUserInput());
-            strcpy(searchQuery.string, worker.cpf);
-            positionFindBySearch = _getWorkerIndexBySearch(field_cpf, searchQuery);
         } while (positionFindBySearch != -1 && positionFindBySearch != worker.code);
     }
 
@@ -128,11 +127,11 @@ bool updateWorker()
     {
         printf("\nOs dados agora estão assim:\n");
         _showWorker(worker);
-        return true;
+        return success;
     }
     else
     {
-        return false;
+        return failed;
     }
 }
 
@@ -142,7 +141,6 @@ void _deleteVehiclesOfWorker(int workerIndex)
     VEHICLE vehicle;
     FILE *fp;
     int i = 0;
-    // const int sizeFile = _countStoredVehicleStructs();
 
     // Get the vehicle file
     fp = _getFile(vehicle_filename);
@@ -159,7 +157,7 @@ void _deleteVehiclesOfWorker(int workerIndex)
     while (true)
     {
 
-        // // Read the vehicle from the file, break if it's the end of the file
+        // Read the vehicle from the file, break if it's the end of the file
         if (fread(&vehicle, sizeof(vehicle), 1, fp) != 1)
             break;
 
@@ -172,31 +170,31 @@ void _deleteVehiclesOfWorker(int workerIndex)
             fseek(fp, -sizeof(vehicle), SEEK_CUR);
             fwrite(&vehicle, sizeof(vehicle), 1, fp);
         }
-        else
-        {
-        }
 
         i++;
     }
     fflush(fp);
 }
 
-bool deleteWorker()
+feedback deleteWorker()
 {
     WORKER worker;
 
     int position = readOneWorker(true);
     if (position == -1)
-        return false;
+        return failed;
 
     worker = _getWorkerByIndex(position);
+    if (worker.status == deleted)   // it means that get worker by index failed, because the status was already filtered  at search function
+        return failed;
+
     worker.status = deleted;
 
     printf("\nDeletando funcionário de código %d\n", worker.code);
 
     _deleteVehiclesOfWorker(worker.code);
 
-    return _insertWorkerIntoDatabase(worker);
+    return _insertWorkerIntoDatabase(worker) ? success : failed;
 }
 
 int readOneWorker(bool returnPosition)
@@ -206,8 +204,8 @@ int readOneWorker(bool returnPosition)
     int positionFindBySearch = -1;
 
     printf("\nInsira o codigo do servidor que deseja:\n");
-    searchQuery.integer = getWorkerCodeFromUserInput();
-    positionFindBySearch = _getWorkerIndexBySearch(field_code, searchQuery);
+    searchQuery.integer = getWorkerCodeFromUserInput(); 
+    positionFindBySearch = _getWorkerIndexBySearch(field_code, searchQuery); // only searches in active workers
 
     if (positionFindBySearch == -1)
     {
@@ -216,12 +214,8 @@ int readOneWorker(bool returnPosition)
     }
 
     worker = _getWorkerByIndex(positionFindBySearch);
-
-    if (worker.status == deleted)
-    {
-        printf("\nNão há servidor ativo com este código em nossos registros\n");
-        return returnPosition ? -1 : 0;
-    }
+    if (worker.status == deleted)   // it means that get worker by index failed, because the status was already filtered  at search function
+        return returnPosition? -1 : 0;
 
     printf("\nUm registro foi encontrado:\n");
     _showWorker(worker);

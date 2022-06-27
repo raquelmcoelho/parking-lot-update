@@ -33,13 +33,13 @@ int main(){
 
         switch(choice){
             case create_worker:
-                feedback = createWorker() ? success : failed;
+                feedback = createWorker();
                 break;
             case update_worker:
-                feedback = updateWorker() ? success : failed;
+                feedback = updateWorker();
                 break;
             case delete_worker:
-                feedback = deleteWorker() ? success : failed;
+                feedback = deleteWorker();
                 break;
             case read_one_worker:
                 feedback = (bool) readOneWorker(false) ? success : failed;

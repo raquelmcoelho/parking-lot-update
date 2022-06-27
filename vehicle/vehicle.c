@@ -152,11 +152,19 @@ feedback showVehicleByCode()
         printf("Erro ao abrir o arquivo\n");
         return failed;
     }
-    // fseek to the position of the vehicle
-    fseek(fp, vehicleCode * sizeof(VEHICLE), SEEK_SET);
 
+    // fseek to the position of the vehicle
+    if(fseek(fp, vehicleCode * sizeof(VEHICLE), SEEK_SET) != 0)
+    {
+        printf("Registro Inexistente ou Problemas no Posicionamento!!!");
+        return failed;
+    }
     // read the vehicle
-    fread(&vehicle, sizeof(VEHICLE), 1, fp);
+    if (fread(&vehicle, sizeof(VEHICLE), 1, fp) != 1)
+    {
+        printf("Problemas na leitura do Registro!!!");
+        return failed;
+    }
 
     if (vehicle.status != deleted)
     {

@@ -36,8 +36,12 @@ void _showAllWorkersAlphabetically(type filter){
     for(int index = 0; index < sizeFile; index++){
         if(filter == v[index].type || filter == 0){
             if(v[index].status != deleted){
-                _showWorkerByIndex(v[index].index);
-                hasWorkersToShow = true;
+                worker = _getWorkerByIndex(v[index].index);
+                if (worker.status != deleted) // prevaint failes caused by fread at get worker by index function
+                {
+                    _showWorker(worker);
+                    hasWorkersToShow = true;
+                }
             }
         }
     }
@@ -91,7 +95,6 @@ int _getFirstIndexFreeForWorker(){
     return position;
 }
 
-// TODO: igualar ambas
 void _insertVehicleIntoDatabase(VEHICLE vehicle)
 {
     FILE *fp;
@@ -107,6 +110,7 @@ bool _insertWorkerIntoDatabase(WORKER worker)
     FILE *fp;
     fp = _getFile(worker_filename);
     fseek(fp, (long)worker.code * sizeof(WORKER), SEEK_SET);
+
     if(fwrite(&worker, sizeof(worker), 1, fp) != 1){
         printf("Falhou a escrita do registro");
         return false;
@@ -114,20 +118,6 @@ bool _insertWorkerIntoDatabase(WORKER worker)
 
     fclose(fp);
     return true;
-}
-
-void _showAllVehicles()
-{
-    FILE *fp;
-    VEHICLE vehicle;
-    fp = _getFile(vehicle_filename);
-    fseek(fp, 0L, SEEK_SET);
-    while(fread(&vehicle, sizeof(VEHICLE), 1, fp) == 1){
-        if(vehicle.status != deleted){
-            _showVehicle(vehicle);
-        }
-    }
-    fclose(fp);
 }
 
 void _showAllWorkers()
@@ -154,12 +144,18 @@ void _showAllWorkers()
 
 void _showVehicleByIndex(int position)
 {
-    _showVehicle(_getVehicleByIndex(position));
-}
-
-void _showWorkerByIndex(int position)
-{
-    _showWorker(_getWorkerByIndex(position));
+    VEHICLE vehicle;
+    if(position <= _countStoredVehicleStructs() && position >= 0){
+        FILE *fp;
+        fp = _getFile(vehicle_filename);
+        fseek(fp, position * sizeof(VEHICLE), SEEK_SET);
+        if(fread(&vehicle, sizeof(VEHICLE), 1, fp) == 1){
+            _showVehicle(vehicle);
+        } else {
+            printf("\nErro de leitura no arquivo\n");
+        }
+        fclose(fp);
+    }
 }
 
 
@@ -172,25 +168,14 @@ WORKER _getWorkerByIndex(int position)
         fseek(fp, position * sizeof(WORKER), SEEK_SET);
         if(fread(&workerTested, sizeof(WORKER), 1, fp) == 1){
             workerReturned = workerTested;
+        } else {
+            workerReturned.status = deleted;
+            printf("\nErro de leitura no arquivo\n");
         }
         fclose(fp);
     }
-    return workerReturned;
-}
 
-VEHICLE _getVehicleByIndex(int position)
-{
-    VEHICLE vehicleReturned, vehicleTested;
-    if(position <= _countStoredVehicleStructs() && position >= 0){
-        FILE *fp;
-        fp = _getFile(vehicle_filename);
-        fseek(fp, position * sizeof(VEHICLE), SEEK_SET);
-        if(fread(&vehicleTested, sizeof(VEHICLE), 1, fp) == 1){
-            vehicleReturned = vehicleTested;
-        }
-        fclose(fp);
-    }
-    return vehicleReturned;
+    return workerReturned;
 }
 
 
@@ -277,4 +262,3 @@ bool fileExists(char *fileName)
     fclose(file);
     return true;
 }
-
